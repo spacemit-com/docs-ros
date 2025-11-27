@@ -1,0 +1,3 @@
+[submodule "05_Robot_development/5.7机器人应用案例/code/jobot-ai-elephant"]
+	path = 05_Robot_development/5.7机器人应用案例/code/jobot-ai-elephant
+	url = https://github.com/elephantrobotics/jobot-ai-elephant.git
