@@ -1,15 +1,12 @@
+sidebar_position: 1
 
 # 消息接口说明
-
-
 
 ## 音频消息
 
 消息文件位置：`jobot_interfaces/msg/AudioFrame.msg`
 
 用于传输音频数据流，包含时间戳、采样信息和原始 PCM 数据。
-
-
 
 ### 消息定义
 
@@ -30,8 +27,6 @@ int32 sample_format
 int16[] data
 ```
 
-
-
 ### 字段说明
 
 | 字段名          | 类型              | 说明                                    |
@@ -42,15 +37,11 @@ int16[] data
 | `sample_format` | `int32`           | 数据格式：`0=PCM16`，`1=float32`        |
 | `data`          | `int16[]`         | 音频帧数据（PCM 16bit 小端序）          |
 
-
-
 ### 使用说明
 
 订阅该消息时，可以通过 `header.stamp` 获取时间戳，用于和其他传感器同步；
  `sample_rate` 和 `channels` 用于解码音频数据；
  `data` 则是原始音频样本数组，可以直接写入 WAV 文件或输入到 ASR 模型。
-
-
 
 ### Python 订阅示例（rclpy）
 
@@ -89,8 +80,6 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 ```
-
-
 
 ### C++ 订阅示例（rclcpp）
 
@@ -136,8 +125,6 @@ int main(int argc, char * argv[])
 }
 ```
 
-
-
 ## VAD
 
 消息文件位置：`jobot_interfaces/msg/VADResult.msg`
@@ -152,8 +139,6 @@ float32 prob        # 语音概率
 bool is_speech      # 是否检测到语音
 ```
 
-
-
 ### 字段说明
 
 | 字段名      | 类型              | 说明                                                         |
@@ -162,15 +147,11 @@ bool is_speech      # 是否检测到语音
 | `prob`      | `float32`         | 语音活动概率，范围 [0.0, 1.0]，表示当前帧包含语音的置信度    |
 | `is_speech` | `bool`            | 是否检测到语音，`true`=有人声，`false`=无人声                |
 
-
-
 ### 使用场景
 
 - **语音触发**：可用于唤醒词检测前的语音段检测，减少误触发。
 - **ASR 前处理**：在传给语音识别（ASR）前过滤掉静音帧，节省计算资源。
 - **机器人对话系统**：在多模态交互中，判断用户是否正在说话。
-
-
 
 ### Python 订阅示例
 
@@ -204,8 +185,6 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 ```
-
-
 
 ### C++ 订阅示例
 
@@ -243,6 +222,3 @@ int main(int argc, char * argv[])
     return 0;
 }
 ```
-
-
-

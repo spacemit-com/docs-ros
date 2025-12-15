@@ -4,10 +4,6 @@ sidebar_position: 3
 
 # 声源定位
 
-```
-最新版本：2025/09/12
-```
-
 ## 硬件介绍
 
 官方链接：[链接](https://item.m.jd.com/product/10054882134702.html?gx=RnAomTM2b2fan85Hp41wX4inMaW5_TE&gxd=RnAoy2BbbWDZyZwcrIImVA6-xKLxjrc&ad_od=share&utm_source=androidapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=CopyURL)

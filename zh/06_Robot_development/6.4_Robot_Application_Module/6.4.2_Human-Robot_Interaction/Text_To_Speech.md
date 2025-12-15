@@ -26,21 +26,19 @@ TTS（Text-To-Speech，文本转语音）是一种将输入的文字自动转换
 - 设备应可在 Linux ALSA/PipeWire 下即插即用，无需额外驱动。
 - 需至少支持 44.1 kHz 与 48 kHz 两种采样率，以兼容常见语音模型与音频库（如 PortAudio、PyAudio、librosa 等）。
 
-
-
 ### 安装系统依赖项
 
 ```bash
 sudo apt update
 sudo apt install -y libopenblas-dev \
-	portaudio19-dev libsndfile1-dev libcurl4-openssl-dev libfftw3-dev espeak-ng \
-	python3-dev \
-	ffmpeg \
-	python3-spacemit-ort \
-	libcjson-dev \
-	libasound2-dev \
-	python3-pip \
-	python3-venv
+ portaudio19-dev libsndfile1-dev libcurl4-openssl-dev libfftw3-dev espeak-ng \
+ python3-dev \
+ ffmpeg \
+ python3-spacemit-ort \
+ libcjson-dev \
+ libasound2-dev \
+ python3-pip \
+ python3-venv
 ```
 
 ###
@@ -105,8 +103,6 @@ bianbu@bianbu:~$ ros2 launch rdk_hri tts_to_file.launch.py text:="你好，今�
 |    `target_rms`     |                   目标 RMS 音量                   |  `0.05 ~ 0.2`   |             `0.1`              |
 | `compression_ratio` |        动态范围压缩，用来平衡音量高低差异         |   `1.0 ~ 4.0`   |             `3.0`              |
 |   `use_peak_norm`   | 是否对整个生成音频做 RMS 归一化，保持整体音量稳定 | `true`、`false` |            `false`             |
-
-
 
 ## TTS 服务节点
 
@@ -189,8 +185,6 @@ if __name__ == '__main__':
     main()
 
 ```
-
-
 
 ### tts_service.launch.py 参数说明
 

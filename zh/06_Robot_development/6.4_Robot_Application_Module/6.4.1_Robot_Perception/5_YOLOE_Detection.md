@@ -1,10 +1,6 @@
-
+sidebar_position: 5
 
 # YOLOE 物体检测
-
-```
-最新版本：2025/09/12
-```
 
 ## YOLOE 简介
 

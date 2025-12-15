@@ -3,7 +3,7 @@ sidebar_position: 4
 slug: /system_configuration
 ---
 
-# 2.ROS2_LXQT 基础使用
+# 2. ROS2_LXQT 基础使用
 
 - [2.1 系统功能清单](2.1_System_Functional_Specification.md)
 - [2.2 开发文档明细列表](2.2_Detailed_List_of_Development_Documents.md)

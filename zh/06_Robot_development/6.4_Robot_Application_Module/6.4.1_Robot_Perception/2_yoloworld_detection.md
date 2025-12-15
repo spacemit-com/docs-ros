@@ -1,10 +1,6 @@
-
+sidebar_position: 2
 
 # YOLO-World 物体检测
-
-```
-最新版本：2025/09/12
-```
 
 ## YOLO-World 模型简介
 

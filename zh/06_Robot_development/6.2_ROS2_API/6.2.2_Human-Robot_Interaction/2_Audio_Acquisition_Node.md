@@ -1,7 +1,6 @@
+sidebar_position: 2
 
 # 音频采集节点
-
-
 
 ## 支持的硬件与协议
 
@@ -27,8 +26,6 @@
 ```
 sudo apt install python3-pyaudio python3-scipy libfftw3-dev
 ```
-
-
 
 ## 麦克风连接示意
 
@@ -112,8 +109,6 @@ TICK_TIME: ALL              # 定时粒度，ALL 表示不限制，通常由驱�
 ```bash
 arecord -D hw:2,0 -f S16_LE -r 48000 -c 1 test.wav
 ```
-
-
 
 ## 启动命令
 
