@@ -5,10 +5,6 @@ slug: /07_Advanced_development
 
 # 7. 进阶开发
 
-```
-最新版本：2025/09/22
-```
-
 进阶开发指南:
 
 - [7.1 模型量化开发](7.1_Model_Quantization.md)

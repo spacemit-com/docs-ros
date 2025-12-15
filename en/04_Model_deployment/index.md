@@ -6,10 +6,6 @@ slug: /04_Model_deployment
 
 # 4. Model Development Guide
 
-```
-Last Version: 11/09/2025
-```
-
 Guides for deploying and running deep learning models:
 
 - [4.1 Demo Zoo Overview](4.1_Demo_Zoo_Overview.md)

@@ -5,9 +5,6 @@ slug: /06_Robot_development
 
 # 6. 机器人应用开发
 
-```
-最新版本：2025/09/22
-```
 
 - [6.1 操作系统准备](6.1_OS_Preparation/index.md)
 - [6.2 ROS2 API 速查](6.2_ROS2_API/index.md)

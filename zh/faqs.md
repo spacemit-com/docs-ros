@@ -3,7 +3,7 @@ sidebar_position: 10
 slug: /08_FAQ
 ---
 
-# 8.FAQ
+# 8. FAQ
 
 ## 登录
 

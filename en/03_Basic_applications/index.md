@@ -5,10 +5,6 @@ slug: /basic_applications
 
 # 3. Basic Application Development
 
-```
-Last Version: 11/09/2025
-```
-
 Guide to basic application development:
 
 - [3.1 Image Capture and Applications](3.1_Image_Capture_and_Applications/index.md)
