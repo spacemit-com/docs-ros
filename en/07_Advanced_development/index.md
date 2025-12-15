@@ -5,10 +5,6 @@ slug: /07_Advanced_development
 
 # 7. Advanced Development
 
-```
-Latest Version: 2025/09/22
-```
-
 Advanced development guides are:
 
 - [7.1 Model Quantization Development](7.1_Model_Quantization.md)

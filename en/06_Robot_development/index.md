@@ -5,10 +5,6 @@ slug: /06_Robot_development
 
 # 6. Robot Application Development
 
-```
-Last Version: 11/09/2025
-```
-
 Guide for developing robot applications:
 
 - [6.1 OS Preparation](6.1_OS_Preparation/index.md)
