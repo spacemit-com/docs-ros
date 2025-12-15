@@ -1,3 +1,5 @@
+sidebar_position: 4
+
 # ASR 节点
 
 ## 功能说明
@@ -5,8 +7,6 @@
 ASR（Automatic Speech Recognition，自动语音识别）节点用于将语音流转换为文本。
 该节点支持在线语音识别，可结合 VAD 节点使用，在检测到语音段落时启动识别，减少无效计算。
 典型应用场景包括语音对话、人机交互和语音控制等。
-
----
 
 ## 软硬件环境
 
@@ -23,14 +23,14 @@ ASR（Automatic Speech Recognition，自动语音识别）节点用于将语音�
 ```
 sudo apt update
 sudo apt install -y libopenblas-dev \
-	portaudio19-dev \
-	python3-dev \
-	ffmpeg \
-	python3-spacemit-ort \
-	libcjson-dev \
-	libasound2-dev \
-	python3-pip \
-	python3-venv
+ portaudio19-dev \
+ python3-dev \
+ ffmpeg \
+ python3-spacemit-ort \
+ libcjson-dev \
+ libasound2-dev \
+ python3-pip \
+ python3-venv
 ```
 
 配置虚拟环境
@@ -48,14 +48,12 @@ source ~/asr_env/bin/activate
 pip install -r /opt/bros/humble/share/jobot_voice/requirements.txt
 ```
 
-
-
 ## 需要订阅的话题
 
 * `/audio/raw` (`jobot_interfaces/msg/AudioFrame`)
 * 输入音频帧数据，来自音频采集节点。
 
-- `/audio/vad_out` (`jobot_interfaces/msg/VADResult`)
+* `/audio/vad_out` (`jobot_interfaces/msg/VADResult`)
   * 可选的 VAD 订阅。
 
 ## 启动命令
@@ -72,14 +70,10 @@ export PYTHONPATH=~/asr_env/lib/python3.12/site-packages/:$PYTHONPATH
 ros2 launch rdk_hri asr.launch.py
 ```
 
-
-
 ## 发布的话题
 
 * `/voice_text` (`std_msgs/msg/String`)
 * 输出识别后的文本结果。
-
-
 
 ## 参数列表
 
@@ -93,8 +87,6 @@ ros2 launch rdk_hri asr.launch.py
 |   `max_time`   | double |      `10.0`      |          > 0           |                 单段录音最长时长（秒）                 |
 |   `use_vad`    |  bool  |     `false`      |      false、true       |                 是否启用外部 VAD 结果                  |
 |  `vad_topic`   | string | `/audio/vad_out` |  与 VAD 节点保持一致   |                    订阅 VAD 话题名                     |
-
-
 
 ## C++ 订阅示例
 
@@ -122,8 +114,6 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-
-
 
 ## Python 订阅示例
 
@@ -154,4 +144,3 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 ```
-

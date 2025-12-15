@@ -3,7 +3,7 @@ sidebar_position: 3
 slug: /quick_start
 ---
 
-# 1.快速开始
+# 1. 快速开始
 
 - [1.1 硬件介绍](1.1_Hardware_Overview/index.md)
 - [1.2 系统烧录](1.2_System_Flashing/index.md)

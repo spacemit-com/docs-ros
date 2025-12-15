@@ -1,3 +1,5 @@
+sidebar_position: 3
+
 # VAD 节点
 
 ## 功能说明
@@ -26,15 +28,11 @@ VAD（Voice Activity Detection，语音活动检测）节点用于从连续的�
 * `ros2 topic echo`：查看消息内容
 * `ros2 topic hz`：检查话题发布频率
 
-
-
 ## 依赖安装检查
 
 ```
 sudo apt install -y ros-humble-ros-base python3-pyaudio python3-spacemit-ort libfftw3-dev
 ```
-
-
 
 ## 需要订阅的话题
 
@@ -50,8 +48,6 @@ sudo apt install -y ros-humble-ros-base python3-pyaudio python3-spacemit-ort lib
 ```bash
 ros2 launch rdk_hri vad.launch.py
 ```
-
-
 
 ## 发布的话题
 
@@ -70,8 +66,6 @@ ros2 launch rdk_hri vad.launch.py
 | `trig_on`   | float  | 0.23           | 判定是否存在人声的概率阈值 |
 | `sub_topic` | string | /audio/raw     | 订阅的音频流话题           |
 | `pub_topic` | string | /audio/vad_out | 发布的 VAD 结果话题名      |
-
-
 
 ## C++ 订阅示例
 
@@ -106,8 +100,6 @@ int main(int argc, char **argv)
 }
 ```
 
-
-
 ## Python 订阅示例
 
 ```python
@@ -138,4 +130,3 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 ```
-

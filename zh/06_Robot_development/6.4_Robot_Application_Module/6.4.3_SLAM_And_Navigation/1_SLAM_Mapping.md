@@ -1,10 +1,6 @@
-
+sidebar_position: 1
 
 # SLAM 建图
-
-```
-最新版本：2025/09/12
-```
 
 ## 简介
 SLAM（Simultaneous Localization and Mapping）即同时定位与建图，通过传感器数据对环境进行实时建模并构建地图，同时估计机器人的位置和姿态，为机器人导航提供感知信息。

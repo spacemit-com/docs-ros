@@ -1,7 +1,6 @@
+sidebar_position: 4
 
 # OCR 光学字符识别
-
-
 
 ## PaddleOCR 简介
 
@@ -27,8 +26,6 @@ ros-humble-image-transport python3-spacemit-ort python3-pyclipper
 source /opt/bros/humble/setup.bash
 ```
 
-
-
 ## 图片推理
 
 **准备图片**
@@ -51,8 +48,6 @@ ros2 launch rdk_perception ocr_infer_img.launch.py img_path:=/home/bianbu/test.j
 
 ![](./images/ocr2.png)
 
-
-
 ### 参数说明
 
 **ocr_infer_img.launch.py 的参数说明**
@@ -60,8 +55,6 @@ ros2 launch rdk_perception ocr_infer_img.launch.py img_path:=/home/bianbu/test.j
 | **参数名称** | 作用                 | 默认值        |
 | ------------ | -------------------- | ------------- |
 | img_path     | 推理时使用的图片路径 | data/test.jpg |
-
-
 
 ## 使用推理服务
 

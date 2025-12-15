@@ -1,3 +1,5 @@
+sidebar_position: 1
+
 # USB 相机节点
 
 ## 支持的硬件与协议

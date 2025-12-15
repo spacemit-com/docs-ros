@@ -4,10 +4,6 @@ sidebar_position: 2
 
 # LLM 模型聊天
 
-```
-最新版本：2025/09/12
-```
-
 ## 功能简介
 
 本模块基于本地部署的大语言模型（LLM, Large Language Model），实现自然语言处理对话能力，支持非流式服务与流式 Action 两种交互模式。
