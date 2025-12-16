@@ -1,4 +1,6 @@
-# AI聊天机器人
+sidebar_position: 1
+
+# AI 聊天机器人
 
 [点击观看视频](https://archive.spacemit.com/ros2/Video_examples/ai-chat.mp4)
 

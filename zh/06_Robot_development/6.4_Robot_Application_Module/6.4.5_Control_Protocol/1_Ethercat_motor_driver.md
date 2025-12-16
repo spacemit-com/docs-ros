@@ -1,25 +1,28 @@
-
+sidebar_position: 1
 
 # 基于 Ethercat 控制电机
+
 本文档介绍如何基于Ethercat协议控制一体化伺服电机，以杰美康IHSS42-24-05-EC为例
 
 ## 硬件连接
+
 ![硬件连接](images/ethercat_motor.jpg)
 如图所示，接入电机电源，网线一端连接电机IN口，另一端插入开发板网口，
 电源指示灯常亮表示电机正常工作
 
-
 ## 环境说明
+
 bianbu-ROS固件已集成Ethercat环境，在启动前执行以下步骤确认服务是否启用
 
 **接线完成后，查看设备节点是否出现**
+
 ```bash
 ls /dev/EtherCAT0
 ```
+
 如果出现，跳转到[下载软件包](#下载软件包)小节进行下一步
 
 如果节点没有出现，跳转到[启用Ethercat](#启用ethercat)小节进行设置
-
 
 ### 启用Ethercat
 
@@ -30,6 +33,7 @@ cd /boot/spacemit/6.6.63/
 ```
 
 #### 2. 获取开发板dts文件
+
 ```bash
 sudo dtc -I dtb -O dts -o k1-x_MUSE-Pi-Pro.dts k1-x_MUSE-Pi-Pro.dtb
 
@@ -37,16 +41,19 @@ sudo dtc -I dtb -O dts -o k1-x_MUSE-Pi-Pro.dts k1-x_MUSE-Pi-Pro.dtb
 #如果没有dtc工具执行此命令下载
 sudo apt install device-tree-compiler
 ```
+
 注意：本例使用MUSE-Pi-Pro开发板，如果使用其他类型开发板，请将命令行中的设备树文件名替换为实际使用的板型
 
-
 #### 3. 修改dts
+
 ```bash
 vi k1-x_MUSE-Pi-Pro.dts
 ```
+
 * 找到 **&eth0(同ethernet@cac80000)** 节点
 
   **修改compatiable属性为 spacemit,k1x-ec-emac**
+
 ```bash
  ethernet@cac80000 {
         compatible = "spacemit,k1x-ec-emac";
@@ -78,12 +85,12 @@ vi k1-x_MUSE-Pi-Pro.dts
 
 ```
 
-
 * 找到 **&ec_master(同ethercat_master)**
 
   修改 **compatible = "igh,k1x-ec-master";**
 
   修改 **status = "okay";**
+
 ```bash
 ethercat_master {
         compatible = "igh,k1x-ec-master";
@@ -99,13 +106,17 @@ ethercat_master {
 ```
 
 #### 4. 编译新的dtb
+
 ```bash
 sudo dtc -I dts -O dtb -o k1-x_MUSE-Pi-Pro.dtb k1-x_MUSE-Pi-Pro.dts
 ```
+
 #### 5. 重启开发板
+
 ```bash
 sudo reboot
 ```
+
 重启后更改生效
 
 #### 6. 修改设备节点权限
@@ -113,23 +124,22 @@ sudo reboot
 ```bash
 sudo chown bianbu:bianbu /dev/EtherCAT0
 ```
+
 设备节点默认权限为root, 普通用户操作需要手动更改权限，每次重启都需要手动输入该命令获取权限
 
-
-
 此时再次查看Ethercat0设备
+
 ```bash
 bianbu@bianbu:~$ ls -l /dev/EtherCAT0
 crw------- 1 bianbu bianbu 240, 0 Sep 29 20:32 /dev/EtherCAT0
 ```
-
-
 
 ### 下载软件包
 
 **注：如果从本步骤开始切换至root用户执行操作，在启动节点时将不会报错，无需修改任何文件**
 
 #### 1. 创建工作区
+
 ```bash
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
@@ -139,6 +149,7 @@ ros2 pkg create motor_driver --build-type ament_cmake --dependencies ethercat_dr
 ```
 
 #### 2. 下载路径
+
 ```bash
 cd ~
 
@@ -150,6 +161,7 @@ cp -r brdk/core_pkgs/jobot_bringup_pkgs/jobot_protocol_bringup ~/ros_ws/src/
 ```
 
 #### 3. 安装编译环境
+
 ```bash
 cd ~/ros2_ws
 
@@ -173,6 +185,7 @@ ros-humble-ros2-control
 ```
 
 #### 4. ros2 ethercat编译
+
 ```bash
 
 cd ~/ros2_ws/
@@ -185,11 +198,10 @@ colcon build
 
 ```
 
-
 ## 启动与控制
 
-
 ### 1. 启动 ethercat master服务
+
 ```bash
 sudo igh_driver          #bianbu-ROS已集成，直接运行
 ```
@@ -202,8 +214,8 @@ cd brdk/core_pkgs/jobot_bringup_pkgs/jobot_protocol_bringup/resource
 
 在此路径下已预备可执行文件
 
-
 执行
+
 ```bash
 sudo chmod +x igh_driver
 
@@ -211,6 +223,7 @@ sudo chmod +x igh_driver
 ```
 
 可通过此命令查看主站、从站状态
+
 ```bash
 ethercat master
 #输出
@@ -254,7 +267,6 @@ ethercat slaves
 0  0:0  PREOP  +  IHSS42-EC
 ```
 
-
 ### 2. 启动节点
 
 ```bash
@@ -266,6 +278,7 @@ ros2 launch jobot_protocol_bringup motor_drive.launch.py
 注：以root用户操作将不会出现以下报错或警告
 
 * 如果启动失败，请检查设备节点权限
+
 ```bash
 ls -l /dev/EtherCAT0
 
@@ -290,7 +303,6 @@ bianbu - nice -20
 # End of file
 ```
 
-
 ### 3. 控制电机
 
 打开一个新终端
@@ -304,11 +316,11 @@ source install/setup.bash
 
 ros2 topic pub -r 0.2 /trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory '{header: {stamp: {sec: 0, nanosec: 0}, frame_id: ""}, joint_names: ["joint_1"], points: [{positions: [100.0], velocities: [0.0], accelerations: [0.0], time_from_start: {sec: 1, nanosec: 0}},{positions: [10000.0], velocities: [0.0], accelerations: [0.0],time_from_start: {sec: 5, nanosec: 0}}]}'
 ```
+
 电机以固定频率转动
 
-
-
 **参数说明**
+
 ```bash
 1.
 - ros2 topic pub
@@ -365,7 +377,6 @@ ros2 topic pub -r 0.2 /trajectory_controller/joint_trajectory trajectory_msgs/ms
       - time_from_start: {sec: 1, nanosec: 0}   --- 从轨迹开始~到达该点的时间
 ```
 
-
 ### 4. 读取位置信息
 
 打开一个新终端
@@ -375,6 +386,7 @@ cd ~/ros_ws
 source install/setup.bash
 ros2 topic echo /joint_states
 ```
+
 **参数说明**
 
 ```bash
@@ -382,4 +394,3 @@ ros3 topic echo --- 打印实时话题内容
 
 /joint_states   --- 话题名
 ```
-

@@ -1,3 +1,5 @@
+sidebar_position: 1
+
 # 小车建图导航
 
 点击观看 [进迭时空官方视频](https://m.bilibili.com/video/BV15M6UYPEPe?buvid=YC4F7CC82F8DD56B4FD6AC6F6FF7187C0A99&from_spmid=search.search-result.0.0&is_story_h5=false&mid=rnn1kaOkAxuNW2GQpPH%2BIw%3D%3D&p=1&plat_id=116&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=C1945F6E-C110-40A1-AFD3-0E442722A9AD&share_source=WEIXIN&share_tag=s_i&spmid=united.player-video-detail.0.0&timestamp=1735914458&unique_k=Wg9Qmqd&up_id=3537125114906665)
