@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Image
+# Images
 
 Bianbu ROS currently provides two image formats:
 
