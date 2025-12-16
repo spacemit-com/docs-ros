@@ -1,8 +1,6 @@
-# Human Pose Detection
+sidebar_position: 1
 
-```
-Last Version: 12/09/2025
-```
+# Human Pose Detection
 
 ## YOLOv8-Pose Model Overview
 

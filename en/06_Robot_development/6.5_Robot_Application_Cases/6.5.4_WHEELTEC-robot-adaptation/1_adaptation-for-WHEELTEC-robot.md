@@ -1,8 +1,6 @@
-# Wheeltec ROS Differential Drive Robot Adaptation
+sidebar_position: 1
 
-```
-Last Version: 19/09/2025
-```
+# Wheeltec ROS Differential Drive Robot Adaptation
 
 ## Overview
 

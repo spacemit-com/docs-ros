@@ -1,9 +1,6 @@
+sidebar_position: 2
 
 # Navigation2
-
-```
-Last Version: 12/09/2025
-```
 
 ## Overview
 

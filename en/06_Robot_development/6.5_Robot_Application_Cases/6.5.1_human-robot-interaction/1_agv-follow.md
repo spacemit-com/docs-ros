@@ -1,8 +1,6 @@
-# Human-Following AGV
+sidebar_position: 1
 
-```
-Last Version: 19/09/2025
-```
+# Human-Following AGV
 
 Watch the [Demo Video](https://archive.spacemit.com/ros2/Video_examples/agv-follow.mp4)
 

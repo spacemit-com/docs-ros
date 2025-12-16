@@ -1,8 +1,6 @@
-# Mobile Robot Human Following
+sidebar_position: 3
 
-```
-Last Version: 12/09/2025
-```
+# Mobile Robot Human Following
 
 ## Overview
 

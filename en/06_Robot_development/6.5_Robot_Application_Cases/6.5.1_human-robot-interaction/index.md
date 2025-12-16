@@ -5,6 +5,5 @@ slug: 06_Robot_development/Robot_Application_Cases/human_robot_interaction
 
 # Human-Robot Interaction
 
-```
-Last Version: 19/09/2025
-```
+- [Human-Following AGV](1_agv-follow.md)
+- [Smart Retail with Robotic Arm](2_smart-retail.md)
