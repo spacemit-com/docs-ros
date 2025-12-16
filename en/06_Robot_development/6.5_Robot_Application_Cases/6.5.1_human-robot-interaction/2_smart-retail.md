@@ -1,8 +1,6 @@
-# Smart Retail with Robotic Arm
+sidebar_position: 2
 
-```
-Last Version: 19/09/2025
-```
+# Smart Retail with Robotic Arm
 
 Watch the [Demo Video](https://archive.spacemit.com/ros2/Video_examples/smart-retail.mp4)
 

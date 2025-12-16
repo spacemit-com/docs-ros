@@ -1,10 +1,6 @@
-
+sidebar_position: 1
 
 # Automatic Speech Recognition (ASR)
-
-```
-Last Version: 12/09/2025
-```
 
 ## Overview
 

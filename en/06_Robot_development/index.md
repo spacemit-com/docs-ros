@@ -8,6 +8,7 @@ slug: /06_Robot_development
 Guide for developing robot applications:
 
 - [6.1 OS Preparation](6.1_OS_Preparation/index.md)
+- [6.2 ROS2 API](6.2_ROS2_API/index.md)
 - [6.3 Visual DNN Library](6.3_Visual_DNN_Library/index.md)
 - [6.4 Robot Algorithm Library](6.4_Robot_Application_Module/index.md)
 - [6.5 Robot Application Cases](6.5_Robot_Application_Cases/index.md)

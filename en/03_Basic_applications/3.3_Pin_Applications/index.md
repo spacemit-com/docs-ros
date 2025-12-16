@@ -5,10 +5,6 @@ slug: /basic_applications/Pin_Applications
 
 # 3.3 Pin Usage
 
-```
-Last Version: 2025/09/26
-```
-
 - [3.3.1 Pin Definition Description](3.3.1_Pin_Definitions.md)
 - [3.3.2 GPIO Usage Instructions](3.3.2_GPIO_Applications.md)
 - [3.3.3 PWM Usage Instructions](3.3.3_Using_PWM.md)

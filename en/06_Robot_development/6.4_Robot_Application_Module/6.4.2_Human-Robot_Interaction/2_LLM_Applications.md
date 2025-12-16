@@ -1,10 +1,6 @@
-
+sidebar_position: 2
 
 # LLM Chat Module
-
-```
-Last Version: 12/09/2025
-```
 
 ## Overview
 

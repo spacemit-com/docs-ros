@@ -1,8 +1,6 @@
-# YOLO-World Object Detection
+sidebar_position: 2
 
-```
-Last Version: 12/09/2025
-```
+# YOLO-World Object Detection
 
 This guide demonstrates how to use the YOLO-World model for **Open-Vocabulary** object detection on SpacemiT computing hardware. You'll learn to run inference on both images and video streams, visualize the results, and process the detection data through ROS 2 topics.
 

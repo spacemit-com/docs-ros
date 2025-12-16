@@ -5,7 +5,5 @@ slug: 06_Robot_development/Robot_Application_Cases/WHEELTEC-robot-adaptation
 
 # Wheeltec ROS Differential Drive Robot Adaptation
 
-```
-Last Version: 19/09/2025
-```
+- [Wheeltec ROS Differential Drive Robot Adaptation](1_adaptation-for-WHEELTEC-robot.md)
 

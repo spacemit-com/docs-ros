@@ -1,8 +1,6 @@
-# AI Chatbot
+sidebar_position: 1
 
-```
-Last Version: 19/09/2025
-```
+# AI Chatbot
 
 Watch [SpacemiT Official Video](https://archive.spacemit.com/ros2/Video_examples/ai-chat.mp4)
 

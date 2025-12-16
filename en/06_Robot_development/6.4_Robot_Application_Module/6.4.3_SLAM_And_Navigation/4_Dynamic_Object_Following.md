@@ -1,9 +1,6 @@
+sidebar_position: 4
 
 # Dynamic Object Following
-
-```
-Last Version: 12/09/2025
-```
 
 ## Overview
 

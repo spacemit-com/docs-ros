@@ -1,9 +1,6 @@
+sidebar_position: 3
 
 # Sound Localization
-
-```
-Last Version: 12/09/2025
-```
 
 This guide demonstrates how to implement sound source localization using the iFlytek M260C 6-Microphone Array Board. The hardware detects the direction of sound sources and outputs an angle between 0° and 360°.
 
