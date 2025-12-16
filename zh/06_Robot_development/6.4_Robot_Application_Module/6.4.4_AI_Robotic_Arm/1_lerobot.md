@@ -1,3 +1,4 @@
+sidebar_position: 1
 
 # LeRobot 使用指南
 

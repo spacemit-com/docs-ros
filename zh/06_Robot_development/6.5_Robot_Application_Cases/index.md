@@ -7,3 +7,7 @@ slug: /06_Robot_development/Robot_Application_Cases
 
 进迭时空 Application Zoo 是由 AI Robot 团队打造的智能机器人应用中心，为开发者提供丰富的功能应用案例与快速开发指南，助力高效实现机器人应用创新。
 
+- [人机交互](6.5.1_human-robot-interaction/index.md)
+- [环境感知](6.5.2_environmental-perception/index.md)
+- [大语言模型](6.5.3_large-language-model/index.md)
+- [轮趣科技ROS差速小车适配](6.5.4_WHEELTEC-robot-adaptation/index.md)

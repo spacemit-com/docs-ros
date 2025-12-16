@@ -1,4 +1,6 @@
-# 轮趣科技ROS差速小车适配
+sidebar_position: 1
+
+# 轮趣科技 ROS 差速小车适配
 
 ## 案例简介
 
