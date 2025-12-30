@@ -1,9 +1,8 @@
 ---
 sidebar_position: 10
-slug: /08_FAQ
 ---
 
-# 8. FAQ
+# FAQ
 
 ## 登录
 

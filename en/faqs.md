@@ -1,6 +1,6 @@
 sidebar_position: 9
 
-# 8. FAQ
+# FAQ
 
 ## 登录
 
