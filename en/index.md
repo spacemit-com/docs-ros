@@ -9,5 +9,5 @@
 - [5. AI Algorithm Usage Guide](./05_AI_Feature_Experience/index.md)
 - [6. Robot Application Development](./06_Robot_development/index.md)
 - [7. Advanced Development](./07_Advanced_development/index.md)
-- [8. FAQ](faqs.md)
-- [9. Appendix](Appendix.md)
+- [FAQ](faqs.md)
+- [Appendix](Appendix.md)

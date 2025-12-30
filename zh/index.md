@@ -9,5 +9,5 @@
 - [5. AI 算法使用指南](./05_AI_Feature_Experience/index.md)
 - [6. 机器人应用开发](./06_Robot_development/index.md)
 - [7. 进阶开发](./07_Advanced_development/index.md)
-- [8. FAQ](faqs.md)
-- [9. 附录](Appendix.md)
+- [FAQ](faqs.md)
+- [附录](Appendix.md)
