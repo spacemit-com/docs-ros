@@ -1,62 +1,70 @@
 sidebar_position: 1
 
-# LeRobot 使用指南
+# LeRobot User Guide
 
-本文档介绍 K1 上的 LeRobot 使用指南，提供 K1 设备上运行端到端（e2e） 机械臂应用的完整流程，涵盖以下内容：
+This document describes how to use **LeRobot** on the **K1** platform. It provides a complete, end-to-end (E2E) workflow for running robotic arm applications on K1, including:
 
-- SO-101 机械臂（包括主导臂和随从臂）的标定、遥控操作及数据采集流程；
-- ACT 模型训练（X86开发机）并部署于 K1 本地推理，实现机械臂的木块抓取任务；
-- SmolVLA 模型微调（X86开发机）并进行分布式部署，完成机械臂的木块抓取任务。
+- Calibration, teleoperation, and data collection for the **SO-101 dual-arm robot** (leader + follower)
+- Training an **ACT (Action Chunking Transformer)** model on an x86 workstation and deploying it to K1 for local inference to perform a cube pick-and-place task
+- Fine-tuning a **SmolVLA** model on an x86 workstation and deploying it in a distributed setup to complete the same task
 
-## 物料准备
+## Hardware and Software Requirements
 
-运行本项目所需的软硬件设备如下：
+### Hardware
 
-- **训练平台**：一台配置 RTX 系列及以上 GPU 的 X86 开发机
-- **本地环境**：K1 开发板 + Bianbu ROS 固件
-- **机械臂**：SO-101 主从机械臂
-- **视觉输入**：两个 USB 相机
+The following hardware is required:
 
-## 软件环境安装
+- **Training machine**: x86 workstation with an NVIDIA RTX-class GPU or better
+- **Target device**: K1 development board with **Bianbu ROS firmware**
+- **Robot**: SO-101 leader–follower robotic arm
+- **Vision input**: Two USB cameras
 
-> [!NOTE]
+## Software Environment Setup
+
+> **Note**
+> Two environments are required:
 >
-> 本文档需要保持两份环境，一份是开发机环境，主要用于数采（可视化需要）和模型训练；另一份是 K1 本地环境，主要用于模型部署和推理。在开发机和 K1 开发板上均须安装软件环境。其他如无特殊说明，均在 K1 操作。
+> - **x86 development environment**: Used for visualized data collection and model training
+> - **K1 local environment**: Used for model deployment and inference
+>
+> Software must be installed on **both** the x86 workstation and the K1 board.
+> Unless otherwise specified, commands are executed on **K1**.
 
-### 下载源码
+### Download the Source Code
 
-```
+```bash
 wget https://archive.spacemit.com/ros2/prebuilt/brdk_integration/python/lerobot/lerobot.tar.gz
 tar -xvf lerobot.tar.zg -C ~
 ```
 
-> [!CAUTION]
+> **Caution**
 >
-> 为降低多个视角视频帧的总吞吐，Bianbu ROS 在 LeRobot 官方源码基础上，对视频帧进行了 MJPG 格式化处理。除此之外，未做其他修改，以确保最大程度地兼容上游代码。
+> To reduce total bandwidth when streaming multi-view video, **Bianbu ROS converts video frames to MJPG format** based on the official LeRobot source code.
+> No other functional changes were made to ensure maximum upstream compatibility.
 
-### 安装系统依赖
+### Install System Dependencies
 
-首先，更新系统并安装所需的依赖：
+Update the system and install required packages:
 
-```
+```bash
 sudo apt update
 sudo apt install python3-venv ffmpeg
 ```
 
-- python3-venv：使用 pip 虚拟环境来管理 LeRobot 项目依赖
-- ffmpeg：视频帧处理需要
+- **python3-venv**: Used to manage pip virtual environments
+- **ffmpeg**: Required for video frame processing
 
-### 安装 python 依赖
+### Install Python Dependencies
 
-下载并激活预安装的虚拟环境压缩包：
+**Option 1:** Use the Prebuilt Virtual Environment
 
-```
+```bash
 wget https://archive.spacemit.com/ros2/prebuilt/brdk_integration/python/lerobot/lerobot-venv.tar.gz
 tar -xvf lerobot-venv.tar.gz -C ~
 source ~/.lerobot-venv/bin/activate
 ```
 
-也可以直接从 LeRobot 源码安装：
+**Option 2:** Install from LeRobot Source
 
 ```bash
 python3 -m venv ~/.lerobot-venv
@@ -65,111 +73,126 @@ cd ~/lerobot
 pip install -e . && pip install "lerobot[all]"
 ```
 
-## 前置准备
+## Pre-Deployment Setup
 
-### 机械臂标定
+### Robotic Arm Calibration
 
-1. 在机械臂完成 [组装](https://huggingface.co/docs/lerobot/so101#step-by-step-assembly-instructions) 和 [舵机标定](https://huggingface.co/docs/lerobot/so101#configure-the-motors) 的前提下，接上两个机械臂的电源和 usb 口，运行以下代码确认设备号：
+1. Before calibration, ensure the robot is fully assembled and motors are configured with:
 
-```bash
-lerobot-find-port
-```
+   - [SO-101 assembly guide](https://huggingface.co/docs/lerobot/so101#step-by-step-assembly-instructions)
+   - [Motor configuration](https://huggingface.co/docs/lerobot/so101#configure-the-motors)
 
-2. USB 设备在 K1 板卡中常以 `/dev/ttyACM0` 形式出现，运行以下代码获取权限：
+   Then, Connect both arms (power + USB) and run:
 
-```Bash
-sudo chmod 666 /dev/ttyACM0
-```
+   ```bash
+   lerobot-find-port
+   ```
 
-3. 确认串口后，分别对所有机械臂进行标定：
+2. Grant serial port permission
+   USB devices typically appear as `/dev/ttyACM*` on K1:
 
-```Bash
-# 从臂
-lerobot-calibrate \
+   ```Bash
+   sudo chmod 666 /dev/ttyACM0
+   ```
+
+3. Calibrate each arm
+
+   ```Bash
+   # Follower arm
+    lerobot-calibrate \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm # 自定义
 
-# 主臂
-lerobot-calibrate \
+   # Leader arm
+    lerobot-calibrate \
     --teleop.type=so101_leader \
     --teleop.port=/dev/ttyACM1 \
     --teleop.id=my_awesome_leader_arm # 自定义
-```
+   ```
 
-记得更换设备号与自己系统一致。具体过程参考 [Hugging Face 官方标定教程](https://huggingface.co/docs/lerobot/so101#calibration-video)。
+   **Note:** Make sure the device names match those on your system. For the detailed procedure, refer to the [Hugging Face official calibration guide](https://huggingface.co/docs/lerobot/so101#calibration-video) for details.
 
-### 遥控操作
+### Teleoperation
 
-1. **机械臂设备确认**
+1. **Verify Robot Ports**
 
-开始遥操作或数据采集之前运行以下命令以确认机械臂串口号：
+   Before starting teleoperation or data collection, verify the robotic arm’s serial port using the command below.
 
-```Bash
-lerobot-find-port
-```
+   ```Bash
+   lerobot-find-port
+   ```
 
-2. **无相机遥操**
+2. **Teleoperation Without Cameras**
 
-确定串口号正确配置后，运行以下命令进行无相机遥操作：
+   Once the serial ports are correctly configured, run the following command to start teleoperation without cameras.
 
-```Bash
-lerobot-teleoperate \
+   ```Bash
+   lerobot-teleoperate \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm \
     --teleop.type=so101_leader \
     --teleop.port=/dev/ttyACM1 \
     --teleop.id=my_awesome_leader_arm
-```
+   ```
 
-3. **相机确认**
+3. **Camera Setup and Validation**
 
-笔者使用了两个 USB 摄像头，其中一个固定在操作台面顶部（top），提供全局视角；另一个则固定在侧面（side），以获取更加细致的操作视角。摄像头的摆放原则是确保摄像头能够捕捉到任务执行过程中的关键细节，同时避免画面中出现其他无关物体，从而确保数据集的高质量和精度。在固定好摄像头视角后，将两个 USB 摄像头连接至 K1 开发板，并运行以下命令查看摄像头 ID：
+   Two USB cameras are recommended:
+   - **Top view**: Mounted above the workspace for a global view
+   - **Side view**: Mounted on the side for fine-grained manipulation details
 
-```Bash
-lerobot-find-cameras opencv
-```
+   The camera placement follows these principles:
+   - Key details of the task execution must be clearly captured
+   - The field of view should exclude unrelated objects
+   - Camera positions must remain fixed to ensure dataset quality and accuracy
 
-终端将打印出以下信息：
+   After fixing the camera viewpoints, connect both USB cameras to the **K1 development board**, and run the following command to check the assigned camera IDs.
 
-```Bash
---- Detected Cameras ---
-Camera #0:
-  Name: OpenCV Camera @ /dev/video2
-  Type: OpenCV
-  Id: /dev/video20
-  Backend api: V4L2
-  Default stream profile:
-    Format: 0.0
-    Width: 640
-    Height: 480
-    Fps: 30.0
---------------------
-Camera #1:
-  Name: OpenCV Camera @ /dev/video4
-  Type: OpenCV
-  Id: /dev/video22
-  Backend api: V4L2
-  Default stream profile:
-    Format: 0.0
-    Width: 640
-    Height: 480
-    Fps: 30.0
---------------------
+   ```bash
+   lerobot-find-cameras opencv
+   ```
 
-Finalizing image saving...
-Image capture finished. Images saved to outputs/captured_images
-```
+   Example output from terminal:
 
-在 `outputs/capture_images` 目录中找到每个摄像头拍摄的图片，并确认不同位置摄像头对应的端口 ID。
+   ```Bash
+   --- Detected Cameras ---
+   Camera #0:
+    Name: OpenCV Camera @ /dev/video2
+    Type: OpenCV
+    Id: /dev/video20
+    Backend api: V4L2
+    Default stream profile:
+      Format: 0.0
+      Width: 640
+      Height: 480
+      Fps: 30.0
+   --------------------
+   Camera #1:
+    Name: OpenCV Camera @ /dev/video4
+    Type: OpenCV
+    Id: /dev/video22
+    Backend api: V4L2
+    Default stream profile:
+      Format: 0.0
+      Width: 640
+      Height: 480
+      Fps: 30.0
+   --------------------
 
-4. **可视化遥操**
+   Finalizing image saving...
+   Image capture finished. Images saved to outputs/captured_images
+   ```
 
-确定相机 ID 后，运行以下命令进行可视化遥操作，来确认视觉输入的质量是否符合要求：
+   Locate the images captured by each camera in the `outputs/capture_images` directory, and verify the port ID corresponding to each camera position.
 
-```Bash
-lerobot-teleoperate \
+4. **Visualized Teleoperation**
+
+   After confirming camera IDs, run the following command to verify camera quality and framing.
+
+   ```Bash
+   lerobot-teleoperate \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm \
@@ -181,33 +204,34 @@ lerobot-teleoperate \
     --teleop.port=/dev/ttyACM1 \
     --teleop.id=my_awesome_leader_arm \
     --display_data=true
-```
+   ```
 
-### 数据集采集
+### Dataset Collection
 
-1. 在进行数据采集之前可以选择是否登录 `huggingface-cli`，登录后方便数据集模型上传至云端
+1. Before starting data collection, you may choose whether to log in to `huggingface-cli`.
+   Logging in allows you to conveniently upload datasets and models to the Hugging Face Hub.
 
-```Bash
-hf auth login
-```
+   ```Bash
+   hf auth login
+   ```
 
-根据提示输入自己的 huggingface token。
+   Follow the prompts to enter your Hugging Face access token.
 
-2. 登陆后即可指定`<HF_USER>`:
+2. After logging in, you can obtain and set `<HF_USER>` as follows:
 
-```Bash
-HF_USER=$(hf auth whoami | head -n 1 | awk '{print $3}')
-echo $HF_USER
-```
+   ```Bash
+   HF_USER=$(hf auth whoami | head -n 1 | awk '{print $3}')
+   echo $HF_USER
+   ```
 
-若不指定，需要对以下内容的 `<HF_USER>` 进行替换为随意名称。
+   If `<HF_USER>` is not specified, you must manually replace `<HF_USER>` in the following content with an arbitrary name.
 
-3. 接下来开始进行数据采集
+3. Start the data collection
 
-接下运行以下代码开始数据采集：
+   Run the following command to begin data collection:
 
-```Bash
-lerobot-record \
+   ```Bash
+   lerobot-record \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm \
@@ -226,66 +250,74 @@ lerobot-record \
     --dataset.root=./datasets/record-green-cube \
     --dataset.push_to_hub=True \
     --play_sounds=false \
-    --display_data=true # 开启此参数需要在X86端
-```
+    --display_data=true # This is recommended on the x86 workstation
+   ```
 
-- 参数说明
+   - **Parameter Descriptions**
 
-  - `dataset.num_episodes`: 表示预期收集多少组数据
-  - `dataset.episode_time_s`: 表示每次收集数据的时间
-  - `dataset.reset_time_s:` 是每次数据收集之间的准备时间
-  - `dataset.repo_id`：`$HF_USER` 为当前用户，`record-green-cube` 为数据集名称
-  - `dataset.single_task`：任务指令，可用于 VLA 模型输入
-  - `dataset.root`：设置数据集存储的位置，默认在~/.cache/huggingface/lerobot/
-  - `dataset.push_to_hub`: 决定是否将数据上传到 HuggingFace Hub
-  - play_sounds：是否播放指令声音
-  - display_data：是否显示图形化界面，**如果开启此参数，建议在 X86 服务器上进行数采**
+     - `dataset.num_episodes`: Specifies the expected number of data episodes to be collected
+     - `dataset.episode_time_s`: Specifies the duration of each data collection episode (in seconds)
+     - `dataset.reset_time_s`: Preparation time between consecutive data collection episodes (in seconds)
+     - `dataset.repo_id`:
+       - `$HF_USER`: the current user
+       - `record-green-cube`: the dataset name
+     - `dataset.single_task`: Task instruction, which can be used as input for VLA models
+     - `dataset.root`: Specifies the dataset storage location; defaults to `~/.cache/huggingface/lerobot/`
+     - `dataset.push_to_hub`: Determines whether to upload the dataset to the Hugging Face Hub
+     - `play_sounds`：Enables or disables instruction audio playback
+     - `display_data`：Enables or disables the graphical interface. **If enabled, data collection is recommended on an x86 server**
 
-  具体命令可以使用 --help 来获取。
+     For detailed command usage, run the command with `--help`.
 
-- 检查点和恢复
+- **Checkpointing and Recovery**
+  - Checkpoints are created automatically during recording
+  - Resume recording with `--resume=true` for any issues
+  - To restart from scratch, **manually delete** the dataset directory
 
-  - 在录制期间会自动创建检查点。
-  - 如果出现问题，可以通过使用 `--resume=true` 重新运行相同的命令来恢复。
-  - 要从头开始录制， **请手动删除**数据集目录。
+- **Keyboard controls during recording (X11 mode only)**
+  - Press **Right Arrow (**`→`**)**: End the current episode early, or reset the timer and move to the next episode
+  - Press **Left Arrow (**`←`**)**: Discard the current episode and re-record it
+  - Press **Esc (**`ESC`**)**: Immediately stop the session, encode the videos, and upload the dataset
 
-- 录制期间的键盘控制（X11模式下生效）
+- **Tips of record**
 
-  - 按 **向右箭头 （**`→`**）：** 提前停止当前剧集或重置时间并移至下一集。
-  - 按 **向左箭头 （**`←`**）：** 取消当前剧集并重新录制。
-  - 按 **Esc （**`ESC`**）：** 立即停止会话，对视频进行编码，然后上传数据集。
+  - Start with a simple task, such as picking up objects from different positions and placing them into a bin
+  - Aim to record at least **50 episodes** in total, with **around 10 episodes for each position**
+  - Keep the cameras fixed throughout the entire recording process, and perform the grasping actions in a consistent manner
+  - Make sure the task can be completed **by relying only on the camera images**, without relying on external cues
 
-- Tips of record
+## ACT Model Training and Deployment
 
-  - 一个好的开始任务是抓住不同位置的物体并将其放入垃圾箱中。
-  - 建议至少录制 50 集，每个位置 10 集。
-  - 在整个录制过程中保持摄像机固定并保持一致的抓取行为。
-  - 能够通过仅查看相机图像来自己完成任务。
+ACT (Action Chunking Transformer) is an imitation learning algorithm proposed by the ALOHA team in April 2023. It is designed to address the challenges of fine-grained manipulation tasks.
 
-## ACT 模型训练及部署
+ACT combines the strong representation capability of Transformer models with action chunking techniques, enabling it to learn more complex action sequences for tasks such as robot control, while maintaining efficient execution over long-horizon tasks.
 
-ACT（Action Chunking Transformer） 是 ALOHA 团队在 2023 年 4 月提出的一种 模仿学习算法，旨在解决精细操作任务中的挑战。ACT 结合了 Transformer 模型的强大表达能力和 动作分块（Action Chunking） 技术，能够在机器人控制等任务中学习更加复杂的动作序列，并且能在长时间任务中高效执行。
+### Model Training (x86 workstation)
 
-### 模型训练（X86开发机）
+**Move the Dataset to the workstation**
 
-**移动数据集到开发机上**
+If the dataset was collected locally on the K1 device, it must be transferred to the development machine before training:
 
-如果在 K1 本地采集的数据集，需要将数据集上传到开发机：
+1. If the workstation is properly configured with a network proxy and the dataset `push` has already been **pushed to Hugging Face**, you can load the dataset during training via `repo_id`.
+   In this case, make sure to log in `huggingface` from the station terminal.
 
-1. 若开发机正确配置代理，且已将数据集`push`至`huggingface`，可选择在训练时通过`repo_id`方式加载数据集，需要在开发机终端登录`huggingface`。
-2. 若未配置代理，且数据集保存在本地，请将数据集移动至开发机 `~/lerobot/datasets` 数据集。
+2. If no proxy is available and the dataset is stored locally, manually move the dataset to the following directory on the workstation:
+   `~/lerobot/datasets`
 
-**wandb 设置**
+**wandb Setup**
 
-启动 wandb（可选），运行以下命令wandb方便观察训练曲线：
+Optionally enable **wandb** to monitor training metrics and loss curves.
 
+Run the following command to log in:
 ```Bash
 wandb login
 ```
 
-**模型训练**
+**Model Trainin**
 
-运行以下代码开始训练，可通过  `src\lerobot\configs\train.py `文件修改训练参数
+Run the following command to start training.
+Training parameters can be adjusted in the configuration file:
+`src/lerobot/configs/train.py`
 
 ```Bash
 lerobot-train \
@@ -300,25 +332,26 @@ lerobot-train \
   --policy.repo_id=${HF_USER}/my_act_policy
 ```
 
-- 参数说明
-  - `dataset.repo_id`：从 hugging face 下载数据集用于训练
-  - `dataset.root`：使用本地数据集进行训练，优先于 `dataset.repo_id`
-  - `policy.type`：使用的策略类型，用于从零训练
-  - `output_dir`：模型检查点和 wandb 数据保存路径
-  - `job_name`：任务名称
-  - `policy.device`：训练设备，cpu | coda | mps 可选
-  - `wandb.enable`：是否选择启动 wandb
-  - `policy.repo_id`：策略 id
+- **Parameter Descriptions**
+  - `dataset.repo_id`: Downloads the dataset from Hugging Face for training
+  - `dataset.root`: Uses a local dataset for training (takes priority over `dataset.repo_id`)
+  - `policy.type`: Policy type to train from scratch
+  - `output_dir`: Directory for saving model checkpoints and wandb logs
+  - `job_name`: Name of the training job
+  - `policy.device`: Training device (`cpu` | `cuda` | `mps`)
+  - `wandb.enable`: Enables or disables wandb logging
+  - `policy.repo_id`: Repository ID for saving the trained policy
 
-> [!NOTE]
->
-> 笔者使用的卡是 RTX 4090，数据集为 60 组操作数据，训练 200k 轮（直到 loss 收敛至最低即可），batch size为8，大约需要4小时。
+> **Note**
+> If the trained the model using an **RTX 4090 GPU**, with a dataset of **60 episodes**.
+> Training was run for **200k steps** (until the loss converged), with a **batch size of 8**, and took approximately **4 hours**.
 
-### 模型部署
+### Model Deployment
 
-**将模型复制到 K1 开发板**
+**Copy the Model to the K1 Development Board**
 
-在开发机上完成模型训练后，将最终的模型检查点复制到 K1 开发板的 `lerobot` 目录下。模型路径及结构如下：
+After completing model training on the development machine, copy the final model checkpoint to the `lerobot` directory on the **K1 development board**.
+The model path and directory structure are shown below:
 
 ```bash
 (.lerobot-venv) ➜  lerobot git:(main) ✗ tree outputs/train/act_so101_pickplace/checkpoints/last/pretrained_model
@@ -330,13 +363,14 @@ outputs/train/act_so101_pickplace/checkpoints/last/pretrained_model
 1 directory, 3 files
 ```
 
-- `config.json`：模型配置文件，包含模型的超参数和其他配置
-- `model.safetensors`：保存模型权重的文件
-- `train_config.json`：训练过程中使用的配置文件，记录了训练参数
+- `config.json`: Model configuration file, including hyperparameters and other settings
+- `model.safetensors`: File containing the trained model weights
+- `train_config.json`: Configuration used during training, recording the training parameters
 
-**模型推理**
+**Model Inference**
 
-将模型部署到 K1 开发板后，可以在本地执行推理任务。以下是执行抓取任务的命令示例：
+Once the model is deployed to the K1 development board, you can run inference locally.
+The following example shows how to execute a **grasping task** using the trained model:
 
 ```bash
 lerobot-record  \
@@ -357,19 +391,22 @@ lerobot-record  \
   --play_sounds=false
 ```
 
-## SmolVLA 模型微调及推理
+## SmolVLA Model Fine-tuning and Inference
 
-SmolVLA 模型是一个轻量级的视觉-语言-动作（VLA）模型，具有仅 450M 的参数量，能够在消费级 GPU 上高效地进行训练和部署。该模型在视觉-大语言模型（VLM）的基础上，融入了动作专家（Action Expert）模块，能够理解视觉输入（如图像或视频流）以及自然语言指令，并根据这些输入生成机器人动作序列。
+**SmolVLA** is a lightweight **Vision–Language–Action (VLA)** model with approximately **450M parameters**, enabling efficient training and deployment on **consumer-grade GPUs**.
+
+Built on top of a **Vision–Language Model (VLM)**, SmolVLA integrates an **Action Expert** module that allows the model to understand visual inputs (such as images or video streams) together with natural language instructions, and generate corresponding **robot action sequences**.
 
 ![image](images/smolvla.png)
 
-### 模型微调（X86开发机）
+### Model Fine-tuning (x86 Workstation)
 
-建议基于 Hugging Face 官方发布的基础模型进行微调，这样模型可以从已经训练好的通用场景中快速学习到特定场景下的知识和技能。
+It is recommended to fine-tune SmolVLA based on the **official base model released on Hugging Face**.
+Starting from a pretrained base model allows the system to quickly adapt general visual and language understanding to **task-specific scenarios**.
 
-微调指令：
+Fine-tuning Command as below:
 
-```
+```bash
 lerobot-train \
   --dataset.repo_id=${HF_USER}/record-green-cub \
   --dataset.root=datasets/record-green-cube \
@@ -382,13 +419,23 @@ lerobot-train \
   --wandb.enable=true
 ```
 
-- `policy.path`：基础模型的路径或者名字，这里指 lerobot 项目的 vla_base 模型
+- `policy.path`: Path or name of the base model.
+  In this example, it refers to the **`smolvla_base` model provided by the LeRobot project**.
 
-### 分布式部署
+### Distributed Deployment
 
-K1 本地的算力无法直接运行 SmolVLA 模型，可以借助 LeRobot 项目提供的分布式方法来部署 SmolVLA。具体地，K1 作为客户端，负责数据采集和动作执行；X86 开发机作为服务端，负责使用 SmolVLA 模型来推理产生动作序列。客户端和服务端通过 gRPC 协议进行数据传输和指令交互。客户端将采集到的视觉数据和传感器信息发送给服务端，服务端使用 SmolVLA 模型对数据进行推理，生成相应的动作序列，再将这些动作序列返回给客户端，驱动机械臂执行抓取任务。
+The compute capability of the K1 device is not sufficient to run the **SmolVLA** model locally.
+Instead, SmolVLA can be deployed using the **distributed deployment approach provided by the LeRobot project**.
 
-服务端指令：
+In this setup:
+
+- The **K1 device acts as the client**, responsible for data collection and action execution
+- The **x86 workstation acts as the server**, running the SmolVLA model and performing inference to generate action sequences
+- The client and server communicate via the **gRPC protocol**
+
+During operation, the client sends captured visual data and sensor observations to the server. The server performs inference using the SmolVLA model, generates the corresponding action sequences, and sends them back to the client, which then drives the robotic arm to execute the grasping task.
+
+Server command as below:
 
 ```
 python src/lerobot/scripts/server/policy_server.py \
@@ -399,7 +446,7 @@ python src/lerobot/scripts/server/policy_server.py \
      --obs_queue_timeout=1
 ```
 
-客户端指令：
+Client command as below:
 
 ```bash
 python src/lerobot/scripts/server/robot_client.py \
@@ -421,15 +468,15 @@ python src/lerobot/scripts/server/robot_client.py \
     --debug_visualize_queue_size=True
 ```
 
-## 常见问题排查
+## FAQ
 
-### Rerun 渲染失败
+### Rerun Rendering Failure
 
-bianbu ros上图形渲染后端为gles，rerun默认选择vulkan作为渲染后段，使用下面字段指定gles后端：
+On **Bianbu ROS**, the graphics rendering backend is **OpenGL ES (GLES)**.
+By default, **Rerun** uses **Vulkan** as its rendering backend, which may cause rendering failures.
+
+Use the following environment variable to explicitly select the **GLES** backend:
 
 ```Bash
 export WGPU_BACKEND=gles
 ```
-
-
-

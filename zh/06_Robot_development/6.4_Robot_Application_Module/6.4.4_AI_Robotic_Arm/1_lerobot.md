@@ -10,6 +10,8 @@ sidebar_position: 1
 
 ## 物料准备
 
+### 硬件
+
 运行本项目所需的软硬件设备如下：
 
 - **训练平台**：一台配置 RTX 系列及以上 GPU 的 X86 开发机
@@ -231,17 +233,19 @@ lerobot-record \
 
 - 参数说明
 
-  - `dataset.num_episodes`: 表示预期收集多少组数据
-  - `dataset.episode_time_s`: 表示每次收集数据的时间
-  - `dataset.reset_time_s:` 是每次数据收集之间的准备时间
-  - `dataset.repo_id`：`$HF_USER` 为当前用户，`record-green-cube` 为数据集名称
+  - `dataset.num_episodes`：表示预期收集多少组数据
+  - `dataset.episode_time_s`：表示每次收集数据的时间
+  - `dataset.reset_time_s`：是每次数据收集之间的准备时间
+  - `dataset.repo_id`：
+    - `$HF_USER` 为当前用户
+    - `record-green-cube` 为数据集名称
   - `dataset.single_task`：任务指令，可用于 VLA 模型输入
-  - `dataset.root`：设置数据集存储的位置，默认在~/.cache/huggingface/lerobot/
+  - `dataset.root`：设置数据集存储的位置，默认在 `~/.cache/huggingface/lerobot/`
   - `dataset.push_to_hub`: 决定是否将数据上传到 HuggingFace Hub
-  - play_sounds：是否播放指令声音
-  - display_data：是否显示图形化界面，**如果开启此参数，建议在 X86 服务器上进行数采**
+  - `play_sounds`：是否播放指令声音
+  - `display_data`：是否显示图形化界面，**如果开启此参数，建议在 X86 服务器上进行数采**
 
-  具体命令可以使用 --help 来获取。
+  具体命令可以使用 `--help` 来获取。
 
 - 检查点和恢复
 
