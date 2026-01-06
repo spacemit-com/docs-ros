@@ -27,7 +27,7 @@ The following hardware is required:
 > - **x86 development environment**: Used for visualized data collection and model training
 > - **K1 local environment**: Used for model deployment and inference
 >
-> Software must be installed on **both** the x86 workstation and the K1 board.
+> Lerobot SDK must be installed on **both** the x86 workstation and the K1 board.
 > Unless otherwise specified, commands are executed on **K1**.
 
 ### Download the Source Code
@@ -89,7 +89,8 @@ pip install -e . && pip install "lerobot[all]"
    ```
 
 2. Grant serial port permission
-   USB devices typically appear as `/dev/ttyACM*` on K1:
+  
+   USB UART devices typically appear as `/dev/ttyACM*` on K1:
 
    ```Bash
    sudo chmod 666 /dev/ttyACM0

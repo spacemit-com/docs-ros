@@ -23,7 +23,11 @@ sidebar_position: 1
 
 > [!NOTE]
 >
-> 本文档需要保持两份环境，一份是开发机环境，主要用于数采（可视化需要）和模型训练；另一份是 K1 本地环境，主要用于模型部署和推理。在开发机和 K1 开发板上均须安装软件环境。其他如无特殊说明，均在 K1 操作。
+> 本文档需要保持两份环境：
+> - 一份是开发机环境，主要用于数采（可视化需要）和模型训练；
+> - 另一份是 K1 本地环境，主要用于模型部署和推理。
+> 
+> 在开发机和 K1 开发板上均须安装软件环境（Lerobot SDK）。其他如无特殊说明，均在 K1 操作。
 
 ### 下载源码
 
@@ -73,105 +77,111 @@ pip install -e . && pip install "lerobot[all]"
 
 1. 在机械臂完成 [组装](https://huggingface.co/docs/lerobot/so101#step-by-step-assembly-instructions) 和 [舵机标定](https://huggingface.co/docs/lerobot/so101#configure-the-motors) 的前提下，接上两个机械臂的电源和 usb 口，运行以下代码确认设备号：
 
-```bash
-lerobot-find-port
-```
+   ```bash
+   lerobot-find-port
+   ```
 
 2. USB 设备在 K1 板卡中常以 `/dev/ttyACM0` 形式出现，运行以下代码获取权限：
 
-```Bash
-sudo chmod 666 /dev/ttyACM0
-```
+   ```Bash
+   sudo chmod 666 /dev/ttyACM0
+   ```
 
 3. 确认串口后，分别对所有机械臂进行标定：
 
-```Bash
-# 从臂
-lerobot-calibrate \
+   ```Bash
+   # 从臂
+   lerobot-calibrate \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm # 自定义
 
-# 主臂
-lerobot-calibrate \
+   # 主臂
+   lerobot-calibrate \
     --teleop.type=so101_leader \
     --teleop.port=/dev/ttyACM1 \
     --teleop.id=my_awesome_leader_arm # 自定义
-```
+   ```
 
-记得更换设备号与自己系统一致。具体过程参考 [Hugging Face 官方标定教程](https://huggingface.co/docs/lerobot/so101#calibration-video)。
+   记得更换设备号与自己系统一致。具体过程参考 [Hugging Face 官方标定教程](https://huggingface.co/docs/lerobot/so101#calibration-video)。
 
 ### 遥控操作
 
 1. **机械臂设备确认**
 
-开始遥操作或数据采集之前运行以下命令以确认机械臂串口号：
+   开始遥操作或数据采集之前运行以下命令以确认机械臂串口号：
 
-```Bash
-lerobot-find-port
-```
+   ```Bash
+   lerobot-find-port
+   ```
 
 2. **无相机遥操**
 
-确定串口号正确配置后，运行以下命令进行无相机遥操作：
+   确定串口号正确配置后，运行以下命令进行无相机遥操作：
 
-```Bash
-lerobot-teleoperate \
+   ```Bash
+   lerobot-teleoperate \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm \
     --teleop.type=so101_leader \
     --teleop.port=/dev/ttyACM1 \
-    --teleop.id=my_awesome_leader_arm
-```
+       --teleop.id=my_awesome_leader_arm
+   ```
 
 3. **相机确认**
 
-笔者使用了两个 USB 摄像头，其中一个固定在操作台面顶部（top），提供全局视角；另一个则固定在侧面（side），以获取更加细致的操作视角。摄像头的摆放原则是确保摄像头能够捕捉到任务执行过程中的关键细节，同时避免画面中出现其他无关物体，从而确保数据集的高质量和精度。在固定好摄像头视角后，将两个 USB 摄像头连接至 K1 开发板，并运行以下命令查看摄像头 ID：
+   笔者使用了两个 USB 摄像头：
+   - 其中一个固定在操作台面顶部（top），提供全局视角；
+   - 另一个则固定在侧面（side），以获取更加细致的操作视角。
+   
+   摄像头的摆放原则是确保摄像头能够捕捉到任务执行过程中的关键细节，同时避免画面中出现其他无关物体，从而确保数据集的高质量和精度。
+   
+   在固定好摄像头视角后，将两个 USB 摄像头连接至 K1 开发板，并运行以下命令查看摄像头 ID：
 
-```Bash
-lerobot-find-cameras opencv
-```
+   ```Bash
+   lerobot-find-cameras opencv
+   ```
 
-终端将打印出以下信息：
+   终端将打印出以下信息：
 
-```Bash
---- Detected Cameras ---
-Camera #0:
-  Name: OpenCV Camera @ /dev/video2
-  Type: OpenCV
-  Id: /dev/video20
-  Backend api: V4L2
-  Default stream profile:
-    Format: 0.0
-    Width: 640
-    Height: 480
-    Fps: 30.0
---------------------
-Camera #1:
-  Name: OpenCV Camera @ /dev/video4
-  Type: OpenCV
-  Id: /dev/video22
-  Backend api: V4L2
-  Default stream profile:
-    Format: 0.0
-    Width: 640
-    Height: 480
-    Fps: 30.0
---------------------
+   ```Bash
+   --- Detected Cameras ---
+   Camera #0:
+    Name: OpenCV Camera @ /dev/video2
+    Type: OpenCV
+    Id: /dev/video20
+    Backend api: V4L2
+    Default stream profile:
+      Format: 0.0
+      Width: 640
+      Height: 480
+      Fps: 30.0
+   --------------------
+   Camera #1:
+    Name: OpenCV Camera @ /dev/video4
+    Type: OpenCV
+    Id: /dev/video22
+    Backend api: V4L2
+    Default stream profile:
+      Format: 0.0
+      Width: 640
+      Height: 480
+      Fps: 30.0
+   --------------------
 
-Finalizing image saving...
-Image capture finished. Images saved to outputs/captured_images
-```
+   Finalizing image saving...
+   Image capture finished. Images saved to outputs/captured_images
+   ```
 
-在 `outputs/capture_images` 目录中找到每个摄像头拍摄的图片，并确认不同位置摄像头对应的端口 ID。
+   在 `outputs/capture_images` 目录中找到每个摄像头拍摄的图片，并确认不同位置摄像头对应的端口 ID。
 
 4. **可视化遥操**
 
-确定相机 ID 后，运行以下命令进行可视化遥操作，来确认视觉输入的质量是否符合要求：
+   确定相机 ID 后，运行以下命令进行可视化遥操作，来确认视觉输入的质量是否符合要求：
 
-```Bash
-lerobot-teleoperate \
+   ```Bash
+   lerobot-teleoperate \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm \
@@ -183,33 +193,33 @@ lerobot-teleoperate \
     --teleop.port=/dev/ttyACM1 \
     --teleop.id=my_awesome_leader_arm \
     --display_data=true
-```
+   ```
 
 ### 数据集采集
 
 1. 在进行数据采集之前可以选择是否登录 `huggingface-cli`，登录后方便数据集模型上传至云端
 
-```Bash
-hf auth login
-```
+   ```Bash
+   hf auth login
+   ```
 
-根据提示输入自己的 huggingface token。
+   根据提示输入自己的 huggingface token。
 
 2. 登陆后即可指定`<HF_USER>`:
 
-```Bash
-HF_USER=$(hf auth whoami | head -n 1 | awk '{print $3}')
-echo $HF_USER
-```
+   ```Bash
+   HF_USER=$(hf auth whoami | head -n 1 | awk '{print $3}')
+   echo $HF_USER
+   ```
 
-若不指定，需要对以下内容的 `<HF_USER>` 进行替换为随意名称。
+   若不指定，需要对以下内容的 `<HF_USER>` 进行替换为随意名称。
 
 3. 接下来开始进行数据采集
 
-接下运行以下代码开始数据采集：
+   接下运行以下代码开始数据采集：
 
-```Bash
-lerobot-record \
+   ```Bash
+   lerobot-record \
     --robot.type=so101_follower \
     --robot.port=/dev/ttyACM0 \
     --robot.id=my_awesome_follower_arm \
@@ -229,23 +239,23 @@ lerobot-record \
     --dataset.push_to_hub=True \
     --play_sounds=false \
     --display_data=true # 开启此参数需要在X86端
-```
+   ```
 
-- 参数说明
+   - 参数说明
 
-  - `dataset.num_episodes`：表示预期收集多少组数据
-  - `dataset.episode_time_s`：表示每次收集数据的时间
-  - `dataset.reset_time_s`：是每次数据收集之间的准备时间
-  - `dataset.repo_id`：
-    - `$HF_USER` 为当前用户
-    - `record-green-cube` 为数据集名称
-  - `dataset.single_task`：任务指令，可用于 VLA 模型输入
-  - `dataset.root`：设置数据集存储的位置，默认在 `~/.cache/huggingface/lerobot/`
-  - `dataset.push_to_hub`: 决定是否将数据上传到 HuggingFace Hub
-  - `play_sounds`：是否播放指令声音
-  - `display_data`：是否显示图形化界面，**如果开启此参数，建议在 X86 服务器上进行数采**
+     - `dataset.num_episodes`：表示预期收集多少组数据
+     - `dataset.episode_time_s`：表示每次收集数据的时间
+     - `dataset.reset_time_s`：是每次数据收集之间的准备时间
+     - `dataset.repo_id`：
+       - `$HF_USER` 为当前用户
+       - `record-green-cube` 为数据集名称
+     - `dataset.single_task`：任务指令，可用于 VLA 模型输入
+     - `dataset.root`：设置数据集存储的位置，默认在 `~/.cache/huggingface/lerobot/`
+     - `dataset.push_to_hub`: 决定是否将数据上传到 HuggingFace Hub
+     - `play_sounds`：是否播放指令声音
+     - `display_data`：是否显示图形化界面，**如果开启此参数，建议在 X86 服务器上进行数采**
 
-  具体命令可以使用 `--help` 来获取。
+     具体命令可以使用 `--help` 来获取。
 
 - 检查点和恢复
 
@@ -434,6 +444,3 @@ bianbu ros上图形渲染后端为gles，rerun默认选择vulkan作为渲染后�
 ```Bash
 export WGPU_BACKEND=gles
 ```
-
-
-
