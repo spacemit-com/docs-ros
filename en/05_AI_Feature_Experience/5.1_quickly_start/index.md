@@ -1,6 +1,5 @@
 ---
 sidebar_position: 2
-slug: /05_AI_Feature_Experience/5.1_quickly_start
 ---
 
 
@@ -13,3 +12,4 @@ slug: /05_AI_Feature_Experience/5.1_quickly_start
 - [5.1.5 Text to Speech (TTS)](5.1.5_Text_to_Speech.md)
 - [5.1.6 Function Calling](5.1.6_Function_Call.md)
 - [5.1.7 Vision Language Model (VLM)](5.1.7_Vision_Language_Model.md)
+- [5.1.8 LLMDet](5.1.8_LLMDet.md)
