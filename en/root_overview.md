@@ -4,11 +4,9 @@ sidebar_position: 1
 
 # Introduction
 
-**Bianbu Robot** is a hardware–software co-design solution for next-generation intelligent robots, built on our self-developed **RISC-V K1** chip and proprietary operating system. It integrates on-device AI inference, Large Language Model (LLM) support, and high-performance control, with broad compatibility across service robots, quadrupeds, drones, robotic arms, and other intelligent terminals.
+**AI Robot** is a hardware–software co-designed solution for next-generation intelligent robots. Built on the self-developed **K1 RISC-V processor** and a proprietary operating system, it integrates **on-device AI inference**, **large language model (LLM) support**, and **high-performance control capabilities**. The solution is widely applicable to service robots, quadruped robots, drones, robotic arms, and other robotic platforms.
 
-The core system **Bianbu ROS** is built upon the self-developed Bianbu OS as the kernel and uses **ROS2** as the runtime core. It integrates multimedia middleware **JDK**, high-performance computing libraries **HPC Libs**, and a development kit **BRDK**, forming a complete robotic application infrastructure. The system comes with built-in AI models and toolchains, supporting commonly used modules and sample references such as speech recognition, vision perception, task orchestration, and path planning — deployment-ready with minimal integration effort.
-
-At its core, **Bianbu ROS** is based on the **Bianbu OS** kernel and uses **ROS2** as the runtime framework. It incorporates multimedia middleware **JDK**, high-performance computing libraries **HPC Libs**, and the **BRDK** development kit to form a complete robotic application infrastructure. The system includes built-in AI models and toolchains, supporting modules and reference implementations for speech recognition, computer vision, task orchestration, and path planning — deployment-ready with minimal integration effort.
+The core system, **ROS2_LXQT**, is based on the self-developed **Bianbu OS** as its operating system foundation, with **ROS2** as the runtime core. It integrates the multimedia middleware **MediaEngine**, the **RVV-optimized libraries (RVV-Opt Libs)**, and the **Robot Development Kit (RDK)** to form a complete robotic application infrastructure. The system comes with a rich set of built-in AI models and toolchains, supporting common robotic functions such as speech recognition, visual perception, task orchestration, and path planning, along with ready-to-use reference examples for rapid deployment.
 
 ## Platform Vision
 
