@@ -1,6 +1,6 @@
 # ROS 2
 
-- [Introduction](intro.md)
+- [Introduction](root_overview.md)
 - [Images](image.md)
 - [1. Quick Start](./01_Quick_start/index.md)
 - [2. ROS2_LXQT Basic Usage](./02_System_configuration/index.md)
