@@ -24,4 +24,4 @@ Link: [ROS2_LXQT Image](https://archive.spacemit.com/ros2/bianbu-ros-images/v1.5
 
 ## Flashing
 
-For flashing with Titan Flasher, see the [Flashing Tool User Manual](https://developer.spacemit.com/documentation?token=B9JCwRM7RiBapHku6NfcPCstnqh).
+For flashing with Titan Flasher, see the [Flashing Tool User Manual](https://www.spacemit.com/community/document/info?lang=en&nodepath=tools/user_guide/flasher_user_guide.md).
