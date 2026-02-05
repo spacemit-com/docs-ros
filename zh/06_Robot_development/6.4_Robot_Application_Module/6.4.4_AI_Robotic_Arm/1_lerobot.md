@@ -75,7 +75,7 @@ pip install -e . && pip install "lerobot[all]"
 
 ### 机械臂标定
 
-1. 在机械臂完成 [组装](https://huggingface.co/docs/lerobot/so101#step-by-step-assembly-instructions) 和 [舵机标定](https://huggingface.co/docs/lerobot/so101#configure-the-motors) 的前提下，接上两个机械臂的电源和 usb 口，运行以下代码确认设备号：
+1. 在机械臂完成 [组装](https://huggingface.co/docs/lerobot/so101#step-by-step-assembly-instructions) 和 [舵机标定](https://huggingface.co/docs/lerobot/so101#configure-the-motors) 的前提下，接上两个机械臂的电源和 USB 口，运行以下代码确认设备号：
 
    ```bash
    lerobot-find-port

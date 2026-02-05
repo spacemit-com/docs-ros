@@ -17,7 +17,7 @@ SpacemiT 板子上已配置了 slam_gmapping、slam_toolbox、cartographer 三�
 三种SLAM算法的对比：
 
 | 对比项 | slam_gmapping | slam_toolbox | cartographer |
-|--------------|---------------|--------------|--------------|
+|:--------------:|:-------------:|:------------:|:------------:|
 | 建图精度      | 中             | 高           | 高           |
 | 图优化/回环检测| 无             | 有           | 有           |
 | 重定位支持    | 无             | 有           | 有           |
@@ -75,7 +75,7 @@ rviz2
 
 gmapping 是一种基于粒子滤波（Particle Filter）的 2D SLAM 算法，基于激光雷达数据在未知环境中构建地图，同时估计机器人位姿。
 
-github地址：https://github.com/ros-perception/slam_gmapping
+GitHub: [ros-perception/slam_gmapping](https://github.com/ros-perception/slam_gmapping)
 
 slam_gmapping 算法已预装在 SpacemiT 板子内，直接打开 SpacemiT 板子终端输入以下命令启动 slam_gmapping 建图
 
@@ -88,7 +88,7 @@ ros2 launch rdk_localization slam_gmapping_sim.launch.py
 
 slam_toolbox 是一套用于 ROS 2 的 2D 同时定位与建图（SLAM）工具包，适合实时建图、离线优化、闭环检测和持久地图管理。
 
-github地址：https://github.com/SteveMacenski/slam_toolbox
+GitHub: [SteveMacenski/slam_toolbox](https://github.com/SteveMacenski/slam_toolbox)
 
 SpacemiT 板子打开终端输入以下命令安装 slam_toolbox 算法
 
@@ -107,7 +107,7 @@ ros2 launch rdk_localization slam_toolbox_sim.launch.py
 
 Cartographer 是 Google 开源的一个可跨多个平台和传感器配置，以2D/3D 形式提供实时同时定位和建图的系统。
 
-github地址：https://github.com/cartographer-project/cartographer
+GitHub 地址：[https://github.com/cartographer-project/cartographer](https://github.com/cartographer-project/cartographer)
 
 SpacemiT 板子打开终端输入以下命令安装 cartographer 算法
 

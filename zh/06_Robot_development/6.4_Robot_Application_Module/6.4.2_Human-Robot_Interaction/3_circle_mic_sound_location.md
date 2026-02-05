@@ -6,7 +6,7 @@ sidebar_position: 3
 
 ## 硬件介绍
 
-官方链接：[链接](https://item.m.jd.com/product/10054882134702.html?gx=RnAomTM2b2fan85Hp41wX4inMaW5_TE&gxd=RnAoy2BbbWDZyZwcrIImVA6-xKLxjrc&ad_od=share&utm_source=androidapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=CopyURL)
+[官方链接](https://item.m.jd.com/product/10054882134702.html?gx=RnAomTM2b2fan85Hp41wX4inMaW5_TE&gxd=RnAoy2BbbWDZyZwcrIImVA6-xKLxjrc&ad_od=share&utm_source=androidapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=CopyURL)
 
 本示例使用科大讯飞联名远场麦克风阵列六麦M260C板语音交互模块实现声源定位功能，硬件如下图：
 

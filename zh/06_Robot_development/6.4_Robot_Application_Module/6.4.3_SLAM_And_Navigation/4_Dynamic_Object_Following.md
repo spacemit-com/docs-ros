@@ -205,7 +205,7 @@ source /opt/bros/humble/setup.bash
 ros2 launch nav_goal_send goal_update_follow_point.launch.py
 ```
 
-> 参考 [yolov6 检测](#yolov6检测跟随) 小节中的说明来调整跟随目标位置估计解算的参数配置，这里不再赘述。
+> 参考 [yolov6 检测](#方案-1yolov6-检测跟随) 小节中的说明来调整跟随目标位置估计解算的参数配置，这里不再赘述。
 
 **启动navigation2动态目标跟随**
 
@@ -216,7 +216,7 @@ source /opt/bros/humble/setup.bash
 ros2 launch rdk_navigation nav2_follow_point.launch.py
 ```
 
-> 参考[yolov6 检测](#yolov6检测跟随) 小节中的说明来调整跟随距离参数配置，这里不再赘述。
+> 参考[yolov6 检测](#方案-1yolov6-检测跟随) 小节中的说明来调整跟随距离参数配置，这里不再赘述。
 
 #### 方案 3：bytetrack 跟随
 
@@ -272,7 +272,7 @@ source /opt/bros/humble/setup.bash
 ros2 launch nav_goal_send goal_update_follow_point.launch.py
 ```
 
-> 参考[yolov6检测](#yolov6检测跟随)中的说明来调整跟随目标位置估计解算的参数配置，这里不再赘述。
+> 参考[yolov6 检测](#方案-1yolov6-检测跟随)中的说明来调整跟随目标位置估计解算的参数配置，这里不再赘述。
 
 **启动 navigation2 动态目标跟随**
 
@@ -283,7 +283,7 @@ source /opt/bros/humble/setup.bash
 ros2 launch rdk_navigation nav2_follow_point.launch.py
 ```
 
-> 参考[yolov6 检测](#yolov6检测跟随) 小节中的说明来调整跟随距离参数配置，这里不再赘述。
+> 参考[yolov6 检测](#方案-1yolov6-检测跟随) 小节中的说明来调整跟随距离参数配置，这里不再赘述。
 
 #### 方案 4：yolov8pose 跟随
 
@@ -391,11 +391,11 @@ source /opt/bros/humble/setup.bash
 ros2 launch rdk_navigation nav2_follow_point.launch.py
 ```
 
-> 参考[yolov6 检测](#yolov6检测跟随) 小节中的说明来调整跟随距离参数配置，这里不再赘述。
+> 参考[yolov6 检测](#方案-1yolov6-检测跟随) 小节中的说明来调整跟随距离参数配置，这里不再赘述。
 
 ### PC端可视化动态跟随效果
 
-通过[AI 检测与跟踪](#yolov6检测跟随) 小节中的任意一种方案启动跟随模式后，可以在 PC 端通过 rviz2 实时可视化跟随效果。
+通过[AI 检测与跟踪](#目标检测跟踪与位置解算) 小节中的任意一种方案启动跟随模式后，可以在 PC 端通过 rviz2 实时可视化跟随效果。
 
 PC 端打开新终端，输入以下命名启动 rivz：
 

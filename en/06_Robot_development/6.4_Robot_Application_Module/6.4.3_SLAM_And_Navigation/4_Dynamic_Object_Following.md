@@ -231,7 +231,7 @@ The Nanotrack model requires initialization using the person bounding box detect
 
   This node takes the bounding box data from the AI vision module, calculates the target person’s position, updates the robot’s navigation goal, and also visualizes the follow target in **rviz2**.
 
-  > Refer to the **Solution 1: yolov6 Detection & Follow** section for **adjusting target position estimation parameters**. The configuration methods remain consistent and won't be repeated here.
+  > Refer to the **[Solution 1: yolov6 Detection & Follow](#solution-1-yolov6-detection--follow)** section for **adjusting target position estimation parameters**. The configuration methods remain consistent and won't be repeated here.
 
 **Step 3: Launch navigation2 Dynamic Target Following**
 
@@ -242,7 +242,7 @@ The Nanotrack model requires initialization using the person bounding box detect
   ros2 launch br_navigation nav2_follow_point.launch.py
   ```
 
-  > Refer to the **Solution 1: yolov6 Detection & Follow** section for **adjusting the following distance parameter configuration**. The setup process remains identical and won't be repeated here.
+  > Refer to the **[Solution 1: yolov6 Detection & Follow](#solution-1-yolov6-detection--follow)** section for **adjusting the following distance parameter configuration**. The setup process remains identical and won't be repeated here.
 
 #### Solution 3: ByteTrack Following
 
@@ -296,7 +296,7 @@ This solution uses **ByteTrack** for tracking. It requires running a YOLO person
   ros2 launch br_navigation nav2_follow_point.launch.py
   ```
 
-  > Refer to the **Solution 1: yolov6 Detection & Follow** section for **adjusting the following distance parameter configuration**. The setup process remains identical and won't be repeated here.
+  > Refer to the **[Solution 1: yolov6 Detection & Follow](#solution-1-yolov6-detection--follow)** section for **adjusting the following distance parameter configuration**. The setup process remains identical and won't be repeated here.
 
 #### Solution 4: YOLOv8Pose Following
 
@@ -433,7 +433,7 @@ For every different camera tilt angle you must re-calibrate the camera extrinsic
 
 ### Visualize Dynamic Following on the PC
 
-After starting any of the [AI detection & tracking](#yolov6-detection-follow) solutions, ou can visualize the dynamic following on a PC using **rviz2** in real time.
+After starting any of the [AI detection & tracking](#detection-tracking--position-estimation) solutions, ou can visualize the dynamic following on a PC using **rviz2** in real time.
 
 - Open **a new terminal** on the PC and run the following commands to launch **rviz2**:
 

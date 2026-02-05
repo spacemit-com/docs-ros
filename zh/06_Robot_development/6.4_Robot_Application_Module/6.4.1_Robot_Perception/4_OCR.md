@@ -4,10 +4,10 @@ sidebar_position: 4
 
 ## PaddleOCR 简介
 
-PaddleOCR（简称 **PPOCR**）是由百度飞桨（PaddlePaddle）团队开源的一个**端到端文字识别（OCR）系统**，致力于提供**“从文本检测 → 方向分类 → 文本识别 → 后处理”** 的完整解决方案。
+PaddleOCR（简称 **PPOCR**）是由百度飞桨（PaddlePaddle）团队开源的一个**端到端文字识别（OCR）系统**，致力于提供 **“从文本检测 → 方向分类 → 文本识别 → 后处理”** 的完整解决方案。
  它不仅支持中英文、多语言场景，还广泛适用于文档、票据、路牌、车牌、自然场景等 OCR 应用。
 
-本示例展示如何基于 SpacemiT 智算核，使用图片或ROS2消息作为输入，执行 OCR 模型的推理，并通过 ROS 2 发布检测结果。
+本示例展示如何基于 SpacemiT 智算核，使用图片或 ROS2 消息作为输入，执行 OCR 模型的推理，并通过 ROS2 发布检测结果。
 
 ## 环境准备
 
@@ -50,11 +50,11 @@ ros2 launch rdk_perception ocr_infer_img.launch.py img_path:=/home/bianbu/test.j
 
 ### 参数说明
 
-**ocr_infer_img.launch.py 的参数说明**
+**`ocr_infer_img.launch.py` 的参数说明**
 
 | **参数名称** | 作用                 | 默认值        |
 | ------------ | -------------------- | ------------- |
-| img_path     | 推理时使用的图片路径 | data/test.jpg |
+| `img_path`     | 推理时使用的图片路径 | `data/test.jpg` |
 
 ## 使用推理服务
 
@@ -133,7 +133,7 @@ if __name__ == '__main__':
 
 ### 请求服务
 
-客户端代码保存为 ocr_client.py
+客户端代码保存为 `ocr_client.py`
 
 然后执行：
 
@@ -145,4 +145,4 @@ python3 ocr_client.py
 
 ![](./images/ocr4.png)
 
-结果可视化文件保存在 ocr_result_srv.jpg
+结果可视化文件保存在 `ocr_result_srv.jpg`

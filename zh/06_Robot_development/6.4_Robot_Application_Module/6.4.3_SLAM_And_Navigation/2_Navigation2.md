@@ -5,7 +5,7 @@ sidebar_position: 2
 ## 简介
 Navigation2 项目是适配于 ROS2 的机器人导航框架，力求以安全的方式让移动机器人从 A 点移动到 B 点，集成了机器人导航所需的位姿定位、行为决策、路径规划、避障控制等多个模块。
 
-Github 地址：https://github.com/ros-navigation/navigation2
+GitHub: [ros-navigation/navigation2](https://github.com/ros-navigation/navigation2)
 
 本示例演示如何在**仿真环境**和**实车**两种场景下运行 Navigation2。
 

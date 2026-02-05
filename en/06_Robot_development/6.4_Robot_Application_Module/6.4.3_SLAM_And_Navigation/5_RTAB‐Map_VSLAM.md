@@ -4,21 +4,21 @@ sidebar_position: 5
 
 ## 简介
 
-RTAB‐Map (Real‐time appearance‐based mapping) 是一种基于外观的闭环检测方法，具有良好的内存管理，以满足处理大场景和在线长周期管理要求。RTAB‐Map集成了视觉和激光雷达SLAM方案，提供了构建三维地图、在未知环境中进行实时定位与导航的一套完整的解决方案。
+RTAB‐Map (Real‐time appearance‐based mapping) 是一种基于外观的闭环检测方法，具有良好的内存管理，以满足处理大场景和在线长周期管理要求。RTAB‐Map 集成了视觉和激光雷达SLAM方案，提供了构建三维地图、在未知环境中进行实时定位与导航的一套完整的解决方案。
 
-本章节演示在k1上运行RTAB‐Map、并在同网段的PC运行gazebo仿真环境的VSLAM示例。
+本章节演示在 K1 上运行 RTAB‐Map、并在同网段的 PC 运行 gazebo 仿真环境的 VSLAM 示例。
 
 ## 准备工作
-1. SpacemiT 板子烧录 ROS2_LXQT 系统镜像 。
+1. SpacemiT 板子烧录 ROS2_LXQT 系统镜像。
 2. PC 端安装 ros-humble 及 RDK。
 
 ## 使用介绍
 
-### PC端
+### PC 端
 
-**安装gazebo仿真环境**
+**安装 gazebo 仿真环境**
 
-在pc打开终端，输入以下命令安装Gazebo。
+在 PC 打开终端，输入以下命令安装 Gazebo。
 
 ```shell
 sudo apt install ros-humble-gazebo*
@@ -28,7 +28,7 @@ sudo apt install ros-humble-turtlebot3-bringup
 sudo apt install ros-humble-turtlebot3-simulations
 ```
 
-**搭建RTAB‐Map环境**
+**搭建 RTAB‐Map 环境**
 
 打开文件`/opt/ros/humble/share/turtlebot3_gazebo/models/turtlebot3_waffle/model.sdf`，按照下述步骤修改以添加深度相机：
 
@@ -54,7 +54,7 @@ sudo apt install ros-humble-turtlebot3-simulations
 
 ### K1端
 
-**安装RTAB‐Map**
+**安装 RTAB‐Map**
 
 在k1打开终端，输入以下命令安装RTAB‐Map与nav2。
 
@@ -72,7 +72,7 @@ sudo apt install ros-humble-nav2-bringup
 #            remappings=remappings),
 ```
 
-### 运行VSLAM
+### 运行 VSLAM
 
 1. 在pc端打开终端，输入以下命令启动gazebo。
 
@@ -107,9 +107,9 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard
 
 ![](images/rtabmap_vslam2.jpg)
 
-### 运行nav2视觉导航
+### 运行 nav2 视觉导航
 
-在完成VSLAM建立完整环境地图之后，按照以下步骤运行基于RTAB‐Map的nav2视觉导航。
+在完成 VSLAM 建立完整环境地图之后，按照以下步骤运行基于 RTAB‐Map 的 nav2 视觉导航。
 
 1. 在pc端打开终端，输入以下命令启动gazebo。
 
@@ -120,21 +120,21 @@ export TURTLEBOT3_MODEL=waffle
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
-2. 在k1打开终端，输入以下命令启动纯定位模式的RTAB‐Map。
+2. 在 K1 打开终端，输入以下命令启动纯定位模式的 RTAB‐Map。
 
 ```shell
 source /opt/ros/humble/setup.bash
 ros2 launch rtabmap_demos turtlebot3_rgbd.launch.py localization:=true
 ```
 
-3. k1打开一个新终端，输入以下命令启动nav2。
+3. K1 打开一个新终端，输入以下命令启动 nav2。
 
 ```shell
 source /opt/ros/humble/setup.bash
 ros2 launch nav2_bringup navigation_launch.py params_file:=/opt/ros/humble/share/rtabmap_demos/params/turtlebot3_rgbd_nav2_params.yaml use_sime_time:=true
 ```
 
-4. pc端打开一个新终端，输入命令打开rviz可视化，点击2D Pose Estimate按钮，按照gazebo环境初始化机器人定位。
+4. PC 端打开一个新终端，输入命令打开 rviz 可视化，点击 2D Pose Estimate 按钮，按照 gazebo 环境初始化机器人定位。
 
 ```shell
 source /opt/ros/humble/setup.bash
@@ -143,6 +143,6 @@ ros2 launch nav2_bringup rviz_launch.py
 
 ![](images/rtabmap_nav2_1.jpg)
 
-4. 点击Nav2 Goal按钮，下发导航目标，进行视觉导航。
+4. 点击 Nav2 Goal 按钮，下发导航目标，进行视觉导航。
 
 ![](images/rtabmap_nav2_2.jpg)
