@@ -23,7 +23,7 @@ The SpaceMiT board provides one-click launchers for three SLAM algorithms for yo
 Comparison of the three SLAM algorithms:
 
 | Comparison Item             | slam_gmapping | slam_toolbox | cartographer |
-|-----------------------------|---------------|--------------|--------------|
+|:--------------:|:-------------:|:------------:|:------------:|
 | Mapping accuracy            | Medium        | High         | High         |
 | Graph optimization / loop closure | None          | Yes          | Yes          |
 | Relocalization support      | No            | Yes          | Yes          |
@@ -119,7 +119,7 @@ ros2 launch br_localization slam_toolbox_sim.launch.py
 
 Cartographer is an open-source system from Google that provides real-time simultaneous localization and mapping in 2D and 3D across multiple platforms and sensor configurations.
 
-GitHub repository: https://github.com/cartographer-project/cartographer
+GitHub repository: [https://github.com/cartographer-project/cartographer](https://github.com/cartographer-project/cartographer)
 
 To install the Cartographer algorithm on SpacemiT boards:
 

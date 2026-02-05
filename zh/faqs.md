@@ -49,5 +49,5 @@ sidebar_position: 10
 
 如仍有问题，可通过以下渠道反馈:
 
-1. [gitee提交issues](https://gitee.com/bianbu/brdk-doc/issues)
+1. [Gitee 提交 issues](https://gitee.com/bianbu/brdk-doc/issues)
 2. [开发者论坛](https://forum.spacemit.com/)

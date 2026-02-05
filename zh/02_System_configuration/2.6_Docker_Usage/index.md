@@ -5,10 +5,6 @@ slug: /system_configuration/2.6_Docker_Usage
 
 # 2.6 Docker 资源指南
 
-```
-最新版本：2025/09/25
-```
-
 - [2.6.1 Docker 环境设置](2.6.1_Docker_setup.md)
 - [2.6.2 Node-RED 使用指南](2.6.2_Node-RED_Usage.md)
 - [2.6.3 JupyterLab 使用指南](2.6.3_JupyterLab_Usage.md)

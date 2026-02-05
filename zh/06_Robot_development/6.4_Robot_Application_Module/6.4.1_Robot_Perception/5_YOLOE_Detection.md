@@ -6,7 +6,7 @@ sidebar_position: 5
 
 [YOLOE (Real-Time Seeing Anything)](https://arxiv.org/html/2503.07465v1) 是零样本、可提示 YOLO 模型的一项新进展，专为 **开放词汇表** 检测和分割而设计。 与之前仅限于固定类别的 YOLO 模型不同，YOLOE 使用文本、图像或内部词汇表提示，从而能够实时检测任何对象类别。 YOLOE 基于 YOLOv10 构建，并受到 [YOLO-World](https://docs.ultralytics.com/zh/models/yolo-world/) 的启发，以最小的速度和准确性影响实现了 **最先进的零样本性能**。
 
-本示例展示如何基于 SpacemiT 智算核，使用图片或视频流作为输入，执行 YOLOE 模型的推理，并通过 ROS 2 发布检测结果。
+本示例展示如何基于 SpacemiT 智算核，使用图片或视频流作为输入，执行 YOLOE 模型的推理，并通过 ROS2 发布检测结果。
 
 ## 环境准备
 
@@ -86,7 +86,6 @@ Please visit in your browser: http://<IP>:8080
 
 打开浏览器输入 `http://<IP>:8080`，即可查看实时推理图像结果。
 
-
 还可以通过追加 port:=xxxx 参数来指定端口号，以避免端口冲突
 
 ![](images/yoloe3.png)
@@ -132,19 +131,17 @@ main()
 
 ### 参数说明
 
-**yoloe_infer_img.launch.py 的参数说明**
+**`yoloe_infer_img.launch.py` 的参数说明**
 
 |    **参数名称**    |                             作用                             |      默认值       |
 | :----------------: | :----------------------------------------------------------: | :---------------: |
-|      img_path      |                     推理时使用的图片路径                     |   data//bus.jpg   |
-| publish_result_img |               是否以图像消息的形式发布推理结果               |       false       |
-|  result_img_topic  |    发布的渲染图像消息名，publish_result_img为true时才有效    |    /result_img    |
-|    result_topic    |                     发布的推理结果消息名                     | /inference_result |
-|   conf_threshold   |        控制**检测结果可信度**的最低标准（过滤低分框）        |        0.2        |
-|   iou_threshold    |           控制**去重规则**的严格程度（处理重叠框）           |        0.7        |
-|    text_prompt     | 控制**检测目标的范围**（常规类别，或物体的自然语言描述，以`,`分隔不同类别描述） |     "person"      |
-
-
+|      `img_path`      |                     推理时使用的图片路径                     |   `data//bus.jpg`   |
+| `publish_result_img` |               是否以图像消息的形式发布推理结果               |       `false`       |
+|  `result_img_topic`  |    发布的渲染图像消息名，`publish_result_img`为`true`时才有效    |    `/result_img`    |
+|    `result_topic`    |                     发布的推理结果消息名                     | `/inference_result` |
+|   `conf_threshold`   |        控制**检测结果可信度**的最低标准（过滤低分框）        |        `0.2`        |
+|   `iou_threshold`    |           控制**去重规则**的严格程度（处理重叠框）           |        `0.7`        |
+|    `text_prompt`     | 控制**检测目标的范围**（常规类别，或物体的自然语言描述，以`,`分隔不同类别描述） |     "person"      |
 
 ## 使用推理服务
 
@@ -221,7 +218,7 @@ if __name__ == "__main__":
 
 ### 请求服务
 
-客户端代码保存为 yoloe_client.py
+客户端代码保存为 `yoloe_client.py`
 
 然后执行：
 
@@ -238,16 +235,13 @@ python3 yoloe_client.py
 
 ![](./images/yoloe5.png)
 
-结果可视化文件保存在 yoloe_service_result.jpg
-
-
+结果可视化文件保存在 `yoloe_service_result.jpg`
 
 ### 参数说明
 
-**yoloe_service.launch.py 的参数说明**
+**`yoloe_service.launch.py` 的参数说明**
 
 |  **参数名称**  |                      作用                      | 默认值 |
 | :------------: | :--------------------------------------------: | :----: |
-| conf_threshold | 控制**检测结果可信度**的最低标准（过滤低分框） |  0.2   |
-| iou_threshold  |    控制**去重规则**的严格程度（处理重叠框）    |  0.7   |
-
+| `conf_threshold` | 控制**检测结果可信度**的最低标准（过滤低分框） |  `0.2`   |
+| `iou_threshold`  |    控制**去重规则**的严格程度（处理重叠框）    |  `0.7`   |
