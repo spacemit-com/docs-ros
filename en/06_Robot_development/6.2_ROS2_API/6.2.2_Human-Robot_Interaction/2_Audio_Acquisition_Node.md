@@ -1,144 +1,144 @@
 sidebar_position: 2
 
-# 音频采集节点
+# Audio Capture Node
 
-## 支持的硬件与协议
+## Supported Hardware and Protocols
 
-- **硬件接口**：
-  - USB 麦克风
-  - USB 声卡
-  - 板载 I²S 麦克风（部分板子没有）
-- **协议**：
+- **Hardware Interfaces**：
+  - USB Microphone
+  - USB Sound Card
+  - Onboard I²S Microphone (not present on all boards)
+- **Protocols**：
   - ALSA (Advanced Linux Sound Architecture)
-  - PulseAudio（可选，主要用于开发/调试）
+  - PulseAudio(Optional; primarily used for development/debugging)
 
-## 软硬件环境
+## Software and Hardware Environment
 
-- **操作系统**：ROS2_LXQT 系统
-- **推荐硬件**：SpacemiT **MUSE Pi Pro** 开发板
-- **依赖工具（开发/调试阶段常用）**：
-  - `arecord` （ALSA 命令行录音工具）
-  - `aplay` （ALSA 命令行播放工具）
-  - `alsamixer` （命令行音量控制）
+- **Operating System**：ROS2_LXQT System
+- **Recommended Hardware**：SpacemiT **MUSE Pi Pro** Development Board
+- **Dependency Tools（Commonly used during development/debugging）**：
+  - `arecord` （ALSA command-line recording tool）
+  - `aplay` （ALSA command-line playback tool）
+  - `alsamixer` （Command-line volume control）
 
-## 系统依赖
+## System Dependencies
 
 ```
 sudo apt install python3-pyaudio python3-scipy libfftw3-dev
 ```
 
-## 麦克风连接示意
+## Microphone Connection Diagram
 
-- 将 USB 麦克风插入 **MUSE Pi Pro** 的 USB 接口
+- Plug the USB microphone into a USB port on the **MUSE Pi Pro**.
 
 ![](images/mic_connect.png)
 
-## 添加到音频组
+## Adding to the Audio Group
 
-普通用户默认可能没有访问音频设备权限，需要加入 **audio** 用户组：
+Ordinary users may not have access to audio devices by default and need to join the * * audio * * user group：
 
 ```bash
 sudo usermod -aG audio $USER
 ```
 
-执行后需要重新登录终端，才能生效。
+After execution, it is necessary to log in to the terminal again to take effect.
 
-## 确认音频设备号
+## Identify Audio Device ID
 
-使用 `arecord` 查询系统中可用的音频设备：
+Use `arecord` to query the audio devices available on the system:
 
 ```bash
 arecord -l
 ```
 
-示例输出：
+Example Output:
 
 ```
 bianbu@bianbu:~$ arecord -l
-**** CAPTURE 硬體裝置清單 ****
+**** CAPTURE Hardware Device List ****
 card 1: sndes8326 [snd-es8326], device 0: i2s0-dai-ES8326 HiFi ES8326 HiFi-0 []
-  子设备: 1/1
-  子设备 #0: subdevice #0
+  Sub device: 1/1
+  Sub device #0: subdevice #0
 card 2: Device [USB PnP Sound Device], device 0: USB Audio [USB Audio]
-  子设备: 1/1
-  子设备 #0: subdevice #0
+  Sub device: 1/1
+  Sub device #0: subdevice #0
 ```
 
-说明：
+Explanation:
 
-- `card 2` 表示声卡编号 2
-- `device 0` 表示设备编号 0
-- 完整设备号为 **hw:2,0**
+- `card 2` indicates sound card number 2.
+- `device 0` indicates device number 0.
+- The full device identifier is **hw:2,0**
 
-## 确认支持频率
+## Verifying Supported Frequencies
 
 ```
 arecord -D hw:2,0 --dump-hw-params
 ```
 
-**示例输出**
+**Example output**
 
 ![](./images/arecord_out1.png)
 
-意义解释
+Interpretation of Parameters
 
 ```
 --------------------
-ACCESS:  MMAP_INTERLEAVED RW_INTERLEAVED # 数据访问方式，RW_INTERLEAVED：常见方式，多个声道的数据交错存储（如 L,R,L,R...）;MMAP_INTERLEAVED：内存映射方式，性能更好，但使用更复杂。
-FORMAT:  S16_LE             # S16_LE：16 位有符号整型，小端字节序（常用）。
-SUBFORMAT:  STD             # 标准 PCM（脉冲编码调制），常规音频格式。
-SAMPLE_BITS: 16             # 每个采样点占用的比特数（这里 16 bit）。
-FRAME_BITS: 16              # 每帧占用的比特数（因为是单声道，这里和 SAMPLE_BITS 一样也是 16）。
-CHANNELS: 1                 # 声道数
-RATE: [44100 48000]         # 支持的采样率范围,这里表示 支持 44.1 kHz 和 48 kHz。
-PERIOD_TIME: [1000 1000000] # 每个周期的时间长度（单位：微秒 us）。
-PERIOD_SIZE: [45 48000]     # 每个周期的采样点数，最小 45 点，最大 48000 点
-PERIOD_BYTES: [90 96000]    # 每个周期对应的字节数，因为是 16bit 单声道，所以等于 PERIOD_SIZE × 2
-PERIODS: [2 1024]           # 环形缓冲区由多少个周期组成，至少 2 个，最多 1024 个。
-BUFFER_TIME: [1875 2000000] # 总缓冲区时间长度（us），这里表示缓冲时间最小 1.875ms，最大 2000ms。
-BUFFER_SIZE: [90 96000]     # 缓冲区能容纳的采样点数
-BUFFER_BYTES: [180 192000]  # 缓冲区字节数，因为是单声道 16bit，所以等于 BUFFER_SIZE × 2
-TICK_TIME: ALL              # 定时粒度，ALL 表示不限制，通常由驱动决定
+ACCESS:  MMAP_INTERLEAVED RW_INTERLEAVED #Data access method，RW_INTERLEAVED：The common method, where data from multiple channels is stored in an interleaved fashion (e.g., L, R, L, R...);MMAP_INTERLEAVED：Memory mapping method, which has better performance but is more complex to use.
+FORMAT:  S16_LE             # S16_LE：16-bit signed integer, little-endian byte order (commonly used).
+SUBFORMAT:  STD            # Standard PCM (Pulse Code Modulation), a conventional audio format.
+SAMPLE_BITS: 16             # The number of bits occupied by each sample point (here, 16 bits).
+FRAME_BITS: 16              # The number of bits occupied by each frame (since this is a mono channel, this value is the same as SAMPLE_BITS—16 bits).
+CHANNELS: 1                 # Number of audio channels.
+RATE: [44100 48000]         # Range of supported sample rates; this indicates support for 44.1 kHz and 48 kHz.
+PERIOD_TIME: [1000 1000000] # Duration of each period (Unit: microseconds [us]).
+PERIOD_SIZE: [45 48000]     # Number of sample points per period (minimum: 45 points; maximum: 48,000 points).
+PERIOD_BYTES: [90 96000]    # Number of bytes corresponding to each period; since this is 16-bit mono audio, this value equals PERIOD_SIZE × 2.
+PERIODS: [2 1024]           # The number of periods comprising the ring buffer; minimum 2, maximum 1024.
+BUFFER_TIME: [1875 2000000] # Total buffer duration (in microseconds); here, this indicates a minimum buffer time of 1.875 ms and a maximum of 2000 ms.
+BUFFER_SIZE: [90 96000]     # The number of sample points the buffer can accommodate.
+BUFFER_BYTES: [180 192000]  # The buffer size in bytes; since the configuration is for mono, 16-bit audio, this value equals BUFFER_SIZE × 2.
+TICK_TIME: ALL              # Timing granularity; ALL indicates no restrictions (typically determined by the driver).
 --------------------
 ```
 
-**这里选择采样率为 48000**，44100 也可以
+**The sampling rate selected here is 48000**，44100 is also acceptable.
 
-测试录音：
+Test Recording:
 
 ```bash
 arecord -D hw:2,0 -f S16_LE -r 48000 -c 1 test.wav
 ```
 
-## 启动命令
+## Launch Command
 
 ```
 ros2 launch rdk_hri recorder.launch.py device_index:=2 sample_rate:=48000
 ```
 
-**终端打印如下：**
+**Terminal Output：**
 
 ![](./images/ros2out1.png)
 
-这将发布音频数据流到 `/audio/raw` 话题
+This will release audio data streams to the topic of '/audio/law'
 
-**查看话题发布频率：**
+**Check Topic Publish Rate：**
 
 `ros2 topic hz /audio/raw`
 
 ![](./images/ros2out2.png)
 
-理论发布频率 = sample_rate / frame_size = 48000 / 512 = 93.75
+Theoretical Publish Rate = sample_rate / frame_size = 48000 / 512 = 93.75
 
-实际发布频率接近理论发布频率表明音频采集正常。
+If the actual publish rate is close to the theoretical rate, it indicates that audio acquisition is functioning correctly.
 
-## 参数详解
+## Parameter Details
 
-|    参数名    |  类型  |   默认值   |             候选值/范围             |     说明     |
+|    Parameter Name    |  Type  |   Default Value   |            Candidate Values/Range             |     Description     |
 | :----------: | :----: | :--------: | :---------------------------------: | :----------: |
-| device_index |  int   |     0      |               正整数                | 音频设备索引 |
-| sample_rate  |  int   |   48000    |            有效的采样率             |  音频采样率  |
-|   channels   |  int   |     1      |                1、2                 |    声道数    |
-|  frame_size  |  int   |    512     | 256、512、1024、2^n ...(不建议更改) | 每帧采样点数 |
-|    format    | string |    pcm     |               float32               | 采样数据格式 |
-|  pub_topic   | string | /audio/raw |               自定义                | 发布的话题名 |
+| device_index |  int   |     0      |               Positive integers                | Audio device index |
+| sample_rate  |  int   |   48000    |            Valid sample rates             |  Audio sample rate  |
+|   channels   |  int   |     1      |                1、2                 |    Number of channels    |
+|  frame_size  |  int   |    512     | 256、512、1024、2^n ...(Not recommended to change) | Samples per frame |
+|    format    | string |    pcm     |               float32               | Sample data format |
+|  pub_topic   | string | /audio/raw |               custom                | Topic name for publishing |
