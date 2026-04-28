@@ -1,5 +1,5 @@
 ---
-sidebar_poisition: 2
+sidebar_position: 2
 ---
 
 # K1
