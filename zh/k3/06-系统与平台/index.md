@@ -1,3 +1,8 @@
+---
+sidebar_position: 6
+slug: /k3/system-platform
+---
+
 # 系统与平台
 
 > **说明**：本页为域入口索引（由 `scripts/generate_docs_tree.py` 生成）。可将总览并入本页，或保留为链向子文档的导航。

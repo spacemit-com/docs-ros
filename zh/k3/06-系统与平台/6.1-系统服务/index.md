@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+slug: /k3/system-platform/system-services
+---
+
 # 系统服务（总览）
 
 > **定稿**：将首行修改为正式发布所用标题；示例：`# 快速入门`（与《文档清单》中本二级「总览」条目一致）。  
