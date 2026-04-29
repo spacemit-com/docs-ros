@@ -3,11 +3,7 @@ sidebar_position: 5
 slug: /k3/robot-dev
 ---
 
-# 机器人开发
-
-> **说明**：本页为域入口索引（由 `scripts/generate_docs_tree.py` 生成）。可将总览并入本页，或保留为链向子文档的导航。
-
-## 子篇索引
+# 5. 机器人开发
 
 - [5.1-机器感知](5.1-机器感知/index.md)
 - [5.2-运动控制](5.2-运动控制/index.md)

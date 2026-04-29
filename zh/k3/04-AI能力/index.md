@@ -3,11 +3,7 @@ sidebar_position: 4
 slug: /k3/ai
 ---
 
-# AI能力
-
-> **说明**：本页为域入口索引（由 `scripts/generate_docs_tree.py` 生成）。可将总览并入本页，或保留为链向子文档的导航。
-
-## 子篇索引
+# 4. AI能力
 
 - [4.1-语音](4.1-语音/index.md)
 - [4.2-视觉](4.2-视觉/index.md)
