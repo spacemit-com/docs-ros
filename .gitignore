@@ -43,6 +43,9 @@ htmlcov/
 *.tmp
 *.temp
 
+# Graphviz sources
+*.dot
+
 # Mac 和 Linux 的系统文件
 .DS_Store
 Thumbs.db
