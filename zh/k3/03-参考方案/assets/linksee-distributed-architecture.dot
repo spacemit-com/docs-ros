@@ -1,0 +1,101 @@
+digraph LinkseeDistributedArchitecture {
+    graph [
+        rankdir=LR,
+        bgcolor="white",
+        pad="0.4",
+        nodesep="0.7",
+        ranksep="0.9",
+        splines=polyline,
+        fontname="Noto Sans CJK SC",
+        labelloc="t",
+        label="Linksee 机器人分布式架构"
+    ];
+
+    node [
+        shape=box,
+        style="rounded,filled",
+        fontname="Noto Sans CJK SC",
+        fontsize=12,
+        margin="0.12,0.08",
+        color="#2f3b52",
+        fillcolor="#f7f9fc"
+    ];
+
+    edge [
+        fontname="Noto Sans CJK SC",
+        fontsize=10,
+        color="#44546a",
+        arrowsize=0.8,
+        labeldistance=1.0,
+        labelangle=18,
+        labelfloat=false
+    ];
+
+    subgraph cluster_client {
+        label="LinkseeClient / 遥操作或推理端";
+        color="#5b9bd5";
+        penwidth=1.5;
+        style="rounded";
+
+        leader_arm [label="SO101 主导臂\nLeader Arm"];
+        keyboard [label="键盘控制\n底盘遥操作"];
+        act_policy [label="ACT Policy\n端到端推理"];
+        linksee_client [label="LinkseeClient\n发送 action / 接收 observation", fillcolor="#eaf2f8"];
+    }
+
+    subgraph cluster_network {
+        label="网络通信";
+        color="#70ad47";
+        penwidth=1.5;
+        style="rounded";
+
+        zmq_action [label="ZMQ action\n端口 5565", shape=component, fillcolor="#edf7ed"];
+        zmq_observation [label="ZMQ observation\n端口 5566", shape=component, fillcolor="#edf7ed"];
+    }
+
+    subgraph cluster_host {
+        label="LinkseeHost / 机器人本体控制端（K3）";
+        color="#ed7d31";
+        penwidth=1.5;
+        style="rounded";
+
+        linksee_host [label="LinkseeHost\n接收 action / 汇聚 observation / 执行动作", fillcolor="#fff2e5"];
+        so101_follower [label="SO101 随从臂\nFollower Arm"];
+        base_adapter [label="LinkseeBaseAdapter\nSpacemit Robot SDK chassis"];
+        cameras [label="USB 相机\nfront / wrist"];
+        robot_state [label="机器人状态\narm + base"];
+    }
+
+    subgraph cluster_robot {
+        label="Linksee 机器人";
+        color="#8064a2";
+        penwidth=1.5;
+        style="rounded";
+
+        linksee_arm [label="机械臂执行\n抓取 / 放置"];
+        linksee_base [label="两轮差速底盘\n移动 / 旋转"];
+        scene [label="作业场景\n目标物 / 环境"];
+    }
+
+    leader_arm -> linksee_client [label="关节遥操作输入"];
+    keyboard -> linksee_client [label="底盘速度指令"];
+    act_policy -> linksee_client [label="模型 action"];
+
+    linksee_client -> zmq_action [label="发布 action"];
+    zmq_action -> linksee_host [label="LinkseeHost 接收 action"];
+
+    linksee_host -> so101_follower [label="SO101 控制"];
+    linksee_host -> base_adapter [label="底盘控制"];
+    so101_follower -> linksee_arm [label="驱动机械臂"];
+    base_adapter -> linksee_base [label="驱动底盘"];
+
+    scene -> cameras [label="视觉输入"];
+    linksee_arm -> robot_state [label="关节状态"];
+    linksee_base -> robot_state [label="底盘状态"];
+    cameras -> linksee_host [label="图像观测"];
+    robot_state -> linksee_host [label="状态观测"];
+
+    linksee_host -> zmq_observation [label="发布 observation"];
+    zmq_observation -> linksee_client [label="LinkseeClient 接收 observation"];
+    linksee_client -> act_policy [label="front/wrist + state", style=dashed];
+}
