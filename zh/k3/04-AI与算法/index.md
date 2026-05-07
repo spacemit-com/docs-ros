@@ -3,7 +3,7 @@ sidebar_position: 4
 slug: /k3/ai
 ---
 
-# 4. AI能力
+# 4. AI与算法
 
 - [4.1 语音](4.1-语音/index.md)
 - [4.2 视觉](4.2-视觉/index.md)
