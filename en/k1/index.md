@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # K1
 
 - [Introduction](intro.md)
