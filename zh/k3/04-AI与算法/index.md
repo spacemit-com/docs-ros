@@ -11,3 +11,4 @@ slug: /k3/ai
 - [4.4 LLM](4.4-LLM.md)
 - [4.5 Agent](4.5-Agent.md)
 - [4.6 VLM](4.6-VLM.md)
+- [4.7 语音控制](4.7-语音控制.md)
