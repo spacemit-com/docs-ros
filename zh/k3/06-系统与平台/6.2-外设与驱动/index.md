@@ -16,3 +16,4 @@ slug: /k3/system-platform/peripherals-drivers
 - [6.2.9 LED](6.2.9-LED.md)
 - [6.2.10 5G](6.2.10-5G.md)
 - [6.2.11 pm](6.2.11-pm.md)
+- [6.2.12 gimbal](6.2.12-gimbal.md)
