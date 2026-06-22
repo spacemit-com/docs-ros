@@ -1,5 +1,6 @@
 ---
-sidebar_position: 4
+sidebar_position: 2
+slug: /06_Robot_development/6.4_Robot_Application_Module/6.4.2_Human-Robot_Interaction/Text_To_Speech
 ---
 
 # 文字转语音（TTS）
