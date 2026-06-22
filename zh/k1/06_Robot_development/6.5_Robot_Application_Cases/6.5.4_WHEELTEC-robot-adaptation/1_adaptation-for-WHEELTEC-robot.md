@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+slug: 06_Robot_development/Robot_Application_Cases/WHEELTEC-robot-adaptation/1_adaptation-for-WHEELTEC-robot
+---
+
 # 轮趣科技ROS差速小车适配
 
 ## 案例简介
