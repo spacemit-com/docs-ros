@@ -1,4 +1,7 @@
+---
 sidebar_position: 1
+slug: 06_Robot_development/Robot_Application_Cases/WHEELTEC-robot-adaptation/1_adaptation-for-WHEELTEC-robot
+---
 
 # Wheeltec ROS Differential Drive Robot Adaptation
 
