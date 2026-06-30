@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+slug: /06_Robot_development/6.4_Robot_Application_Module/6.4.2_Human-Robot_Interaction/1_Speech_to_Text
 ---
 
 # 语音转文字（ASR）
