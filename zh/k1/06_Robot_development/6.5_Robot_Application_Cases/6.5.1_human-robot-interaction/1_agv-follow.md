@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+slug: /06_Robot_development/Robot_Application_Cases/human_robot_interaction/1_agv-follow
+---
+
 # 小车跟随及语音交互
 
 [点击观看视频](https://archive.spacemit.com/ros2/Video_examples/agv-follow.mp4)

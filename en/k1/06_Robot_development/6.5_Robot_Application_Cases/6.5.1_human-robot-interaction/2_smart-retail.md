@@ -1,4 +1,7 @@
+---
 sidebar_position: 2
+slug: 06_Robot_development/Robot_Application_Cases/human_robot_interaction/2_smart-retail
+---
 
 # Smart Retail with Robotic Arm
 

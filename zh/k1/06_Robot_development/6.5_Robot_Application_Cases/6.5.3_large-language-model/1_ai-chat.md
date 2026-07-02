@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+slug: 06_Robot_development/Robot_Application_Cases/large-language-model/1_ai-chat
+---
+
 # AI聊天机器人
 
 [点击观看视频](https://archive.spacemit.com/ros2/Video_examples/ai-chat.mp4)
