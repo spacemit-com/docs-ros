@@ -1,3 +1,8 @@
+---
+sidebar_position: 2
+slug: /06_Robot_development/6.2_ROS2_API/6.2.4_Sensor_System/2_CMP10A_IMU
+---
+
 # CMP10A IMU 使用
 
 
@@ -49,7 +54,7 @@ source /opt/bros/humble/setup.bash
 
 ## 启动 IMU 节点
 
-### 发布 TF 
+### 发布 TF
 
 ```
 ros2 launch rdk_sensors wit_imu_rviz.launch.py port:=/dev/ttyUSB0
@@ -57,7 +62,7 @@ ros2 launch rdk_sensors wit_imu_rviz.launch.py port:=/dev/ttyUSB0
 
 这会发布imu的数据，同时发布一个 base_link 到 imu_link 的 TF 变换，方便使用 rviz2 进行可视化。
 
-### 不发布 TF 
+### 不发布 TF
 
 ```
 ros2 launch rdk_sensors wit_imu.launch.py port:=/dev/ttyUSB0

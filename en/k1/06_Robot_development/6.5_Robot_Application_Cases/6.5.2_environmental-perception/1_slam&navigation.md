@@ -1,4 +1,7 @@
+---
 sidebar_position: 1
+slug: 06_Robot_development/Robot_Application_Cases/integrated-applications/1_slam&navigation
+---
 
 # AGV Mapping and Navigation
 

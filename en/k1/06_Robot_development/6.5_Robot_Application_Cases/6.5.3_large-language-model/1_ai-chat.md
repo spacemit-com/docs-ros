@@ -1,4 +1,7 @@
+---
 sidebar_position: 1
+slug: 06_Robot_development/Robot_Application_Cases/large-language-model/1_ai-chat
+---
 
 # AI Chatbot
 

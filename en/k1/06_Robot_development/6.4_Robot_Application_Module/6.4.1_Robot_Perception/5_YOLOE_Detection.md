@@ -1,4 +1,7 @@
+---
 sidebar_position: 5
+slug: /06_Robot_development/6.4_Robot_Application_Module/6.4.1_Robot_Perception/5_YOLOE_Detection
+---
 
 # YOLOE Object Detection
 

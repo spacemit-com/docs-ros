@@ -1,3 +1,8 @@
+---
+sidebar_position: 2
+slug: 06_Robot_development/Robot_Application_Cases/human_robot_interaction/2_smart-retail
+---
+
 # 机械臂智慧零售
 
 [点击观看视频](https://archive.spacemit.com/ros2/Video_examples/smart-retail.mp4)

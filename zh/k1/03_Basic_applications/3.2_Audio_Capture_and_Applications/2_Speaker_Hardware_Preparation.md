@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+slug: /basic_applications/Audio_Capture_and_Applications/2_Speaker_Hardware_Preparation
+---
 
 # 扬声器硬件调试说明
 

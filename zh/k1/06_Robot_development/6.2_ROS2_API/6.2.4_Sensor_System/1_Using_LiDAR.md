@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+slug: /06_Robot_development/6.2_ROS2_API/6.2.4_Sensor_System/1_Using_LiDAR
+---
+
 # 激光雷达使用
 
 ## 简介

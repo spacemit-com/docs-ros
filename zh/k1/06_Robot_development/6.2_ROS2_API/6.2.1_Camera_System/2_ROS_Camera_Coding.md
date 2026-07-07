@@ -1,10 +1,15 @@
+---
+sidebar_position: 2
+slug: /06_Robot_development/6.2_ROS2_API/6.2.1_Camera_System/2_ROS_Camera_Coding
+---
+
 # ROS2 MIPI Camera 节点 API
 
 ---
 
 ## 1. 概览
 
-- **节点组件**：`camera_node`（采集）、`venc_node`（硬编）、`vdec_node`（硬解）、`vo_node`（显示）、`infer_node`（推理）  
+- **节点组件**：`camera_node`（采集）、`venc_node`（硬编）、`vdec_node`（硬解）、`vo_node`（显示）、`infer_node`（推理）
 - **核心消息**：`jdk_interfaces/msg/JdkFrameMsg` 在各节点之间传递帧（含 DMA/FD 方式）
 
 ### 1.1 节点与话题总览
@@ -204,6 +209,6 @@ if __name__ == '__main__':
 
 ## 8. 常见问题（FAQ，精要）
 
-- **如何切换 H.265？** 将 `venc_node.payload` 设置为 H.265 对应编码类型。  
-- **如何启用零拷贝？** 各节点 `use_dma=true` 且通过 FD 套接字互通（`socket_path` / `*_fd_socket`）。  
+- **如何切换 H.265？** 将 `venc_node.payload` 设置为 H.265 对应编码类型。
+- **如何启用零拷贝？** 各节点 `use_dma=true` 且通过 FD 套接字互通（`socket_path` / `*_fd_socket`）。
 - **显示节点不出图？** 确认 `vo_node` 订阅的是 `/camera_frames`，并与 `camera_node` 的分辨率/格式匹配。

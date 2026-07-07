@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+slug: /06_Robot_development/6.4_Robot_Application_Module/6.4.4_AI_Robotic_Arm/1_lerobot
+---
+
 # LeRobot 使用指南
 
 本文档介绍 K1/K3 上的 LeRobot 使用指南，提供 K1/K3 设备上运行端到端（e2e） 机械臂应用的完整流程，涵盖以下内容：
@@ -154,7 +159,7 @@ lerobot-teleoperate \
 
 笔者使用了两个 USB 摄像头，其中一个固定在操作台面顶部（top），提供全局视角；另一个则固定在侧面（side），以获取更加细致的操作视角。相机布置第三方视角如下图所示。![image-20260326100056147](images/camera.png)
 
-摄像头的摆放原则是确保摄像头能够捕捉到任务执行过程中的关键细节，同时避免画面中出现其他无关物体，从而确保数据集的高质量和精度。top 视角和 side 视角分别如下图所示： 
+摄像头的摆放原则是确保摄像头能够捕捉到任务执行过程中的关键细节，同时避免画面中出现其他无关物体，从而确保数据集的高质量和精度。top 视角和 side 视角分别如下图所示：
 
 ![](images/top.png)
 
