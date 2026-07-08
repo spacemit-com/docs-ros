@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+slug: /05_AI_Feature_Experience/5.1_quickly_start
 ---
 
 

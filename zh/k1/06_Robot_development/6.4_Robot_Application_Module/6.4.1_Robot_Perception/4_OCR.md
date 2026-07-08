@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+slug: /06_Robot_development/6.4_Robot_Application_Module/6.4.1_Robot_Perception/4_OCR
+---
 
 # OCR 光学字符识别
 

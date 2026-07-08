@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+slug: /basic_applications/Audio_Capture_and_Applications/1_Mic_Hardware_Preparation
+---
 
 # 麦克风硬件调试说明
 

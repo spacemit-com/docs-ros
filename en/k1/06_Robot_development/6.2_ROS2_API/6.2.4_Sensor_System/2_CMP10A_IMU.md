@@ -1,4 +1,7 @@
+---
 sidebar_position: 2
+slug: /06_Robot_development/6.2_ROS2_API/6.2.4_Sensor_System/2_CMP10A_IMU
+---
 
 # CMP10A IMU usage
 
