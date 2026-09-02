@@ -34,6 +34,6 @@ slug: /k3/ai/speech
 | --- | --- | --- |
 | 1 | [4.1.3 VAD](4.1.3-VAD.md) | 使用 Silero VAD 检测语音开始和结束，为 ASR 断句、barge-in 和低功耗监听提供前置能力。 |
 | 2 | [4.1.4 声纹](4.1.4-声纹.md) | 使用 CamP+ 提取 192 维 embedding，支持注册、识别和 1:1 验证。 |
-| 3 | [4.1.1 ASR](4.1.1-ASR.md) | 使用 SenseVoice、Zipformer 或 Qwen3-ASR 将语音转成文本，支持文件识别和流式识别。 |
+| 3 | [4.1.1 ASR](4.1.1-ASR.md) | 使用 SenseVoice、Zipformer、Qwen3-ASR、Fun-ASR Nano 或 Gemma4 ASR 进行语音转写；Gemma4 ASR 还支持外语语音转英文。 |
 | 4 | [4.1.2 TTS](4.1.2-TTS.md) | 使用 Matcha-TTS 或 Kokoro 将文本合成为 WAV/PCM，支持文件合成和流式播放。 |
 | 5 | [4.5 Agent](../4.5-Agent.md) | 组合音频、VAD、声纹、ASR、LLM、TTS 和 MCP，运行完整语音助手。 |
