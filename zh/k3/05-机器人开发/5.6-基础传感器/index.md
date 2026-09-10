@@ -5,7 +5,6 @@ slug: /k3/robot-dev/sensors
 
 # 5.6 基础传感器
 
-- [5.6.1 Camera](5.6.1-Camera.md)
 - [5.6.2 IMU](5.6.2-IMU.md)
 - [5.6.3 电机](5.6.3-电机.md)
 - [5.6.4 雷达](5.6.4-雷达.md)
