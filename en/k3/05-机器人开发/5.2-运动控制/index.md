@@ -1,0 +1,11 @@
+---
+sidebar_position: 2
+slug: /k3/robot-dev/control
+---
+
+# 5.2 Motion Control
+
+- [5.2.1 Chassis Control](5.2.1-底盘控制.md)
+- [5.2.2 Gimbal Control](5.2.2-云台控制.md)
+- [5.2.3 Gripper Control](5.2.3-夹爪控制.md)
+- [5.2.4 Robot Arm Control](5.2.4-机械臂控制.md)

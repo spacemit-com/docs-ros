@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1529" height="1054" viewBox="0 0 1529 1054" role="img" aria-labelledby="title desc">
+  <title id="title">Linksee distributed robot architecture</title>
+  <desc id="desc">LinkseeClient takes SO101 leader-arm or keyboard input, or ACT Policy output. ZMQ carries actions to LinkseeHost and observations back. LinkseeHost on K3 reads front and wrist USB cameras and robot state, then controls the SO101 follower arm and mobile base through LinkseeBaseAdapter.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L9 4.5 0 9Z" fill="#334155"/></marker>
+    <style>
+      .title{font-family:Arial,sans-serif;font-size:21px;font-weight:600;fill:#0f172a}.group-title{font-family:Arial,sans-serif;font-size:18px;font-weight:600;fill:#0f172a}
+      .node{fill:#fff;stroke:#334155;stroke-width:1.4}.client{fill:#f2f8ff}.host{fill:#fff6ed}.port{fill:#f1fdf6}
+      .node-title{font-family:Arial,sans-serif;font-size:16px;font-weight:600;fill:#0f172a}.node-sub{font-family:Arial,sans-serif;font-size:15px;fill:#334155}
+      .label{font-family:Arial,sans-serif;font-size:14px;fill:#334155}
+      .wire{fill:none;stroke:#334155;stroke-width:1.5;marker-end:url(#arrow)}.wire-dash{stroke-dasharray:8 7}
+    </style>
+  </defs>
+  <rect width="1529" height="1054" fill="#fff"/>
+  <text x="764" y="57" text-anchor="middle" class="title">Linksee Distributed Robot Architecture</text>
+
+  <!-- Remote teleoperation or inference side -->
+  <rect x="314" y="80" width="1101" height="221" rx="18" fill="none" stroke="#4f90ec" stroke-width="1.8"/>
+  <text x="865" y="105" text-anchor="middle" class="group-title">LinkseeClient / Teleoperation or Inference</text>
+  <rect x="325" y="121" width="125" height="52" rx="16" class="node"/>
+  <text x="387" y="144" text-anchor="middle" class="node-title">SO101 Leader</text>
+  <text x="387" y="163" text-anchor="middle" class="node-sub">Arm</text>
+  <rect x="335" y="238" width="106" height="51" rx="16" class="node"/>
+  <text x="388" y="261" text-anchor="middle" class="node-title">Keyboard</text>
+  <text x="388" y="280" text-anchor="middle" class="node-sub">base control</text>
+  <rect x="669" y="198" width="248" height="52" rx="16" fill="#f2f8ff" stroke="#334155" stroke-width="1.4"/>
+  <text x="793" y="220" text-anchor="middle" class="node-title">LinkseeClient</text>
+  <text x="793" y="240" text-anchor="middle" class="node-sub">send action / receive observation</text>
+  <rect x="1298" y="159" width="106" height="52" rx="16" class="node"/>
+  <text x="1351" y="181" text-anchor="middle" class="node-title">ACT Policy</text>
+  <text x="1351" y="200" text-anchor="middle" class="node-sub">inference</text>
+  <path d="M450 156L669 213" class="wire"/>
+  <text x="535" y="166" text-anchor="middle" class="label">arm teleoperation</text>
+  <path d="M441 263L669 233" class="wire"/>
+  <text x="534" y="244" text-anchor="middle" class="label">base velocity</text>
+  <path d="M1298 193L917 215" class="wire"/>
+  <text x="1100" y="197" text-anchor="middle" class="label">model action</text>
+  <path d="M917 228H1188L1298 204" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="8 7" marker-end="url(#arrow)"/>
+  <text x="1068" y="247" text-anchor="middle" class="label">front / wrist + state</text>
+
+  <!-- Separate ZeroMQ action and observation channels -->
+  <rect x="1264" y="343" width="174" height="220" rx="18" fill="none" stroke="#66a34b" stroke-width="1.8"/>
+  <text x="1351" y="367" text-anchor="middle" class="group-title">Network</text>
+  <rect x="1275" y="384" width="152" height="52" fill="#f1fdf6" stroke="#334155" stroke-width="1.4"/>
+  <text x="1351" y="406" text-anchor="middle" class="node-title">ZMQ observation</text>
+  <text x="1351" y="426" text-anchor="middle" class="node-sub">port 5566</text>
+  <rect x="1294" y="502" width="113" height="51" fill="#f1fdf6" stroke="#334155" stroke-width="1.4"/>
+  <text x="1351" y="524" text-anchor="middle" class="node-title">ZMQ action</text>
+  <text x="1351" y="544" text-anchor="middle" class="node-sub">port 5565</text>
+  <path d="M827 250L1000 386L1294 510" class="wire"/>
+  <text x="1090" y="382" text-anchor="middle" class="label">publish action</text>
+  <path d="M1275 390L1110 346L874 250" class="wire"/>
+  <text x="1100" y="284" text-anchor="middle" class="label">Client receives observation</text>
+
+  <!-- K3-side host -->
+  <rect x="321" y="607" width="1159" height="222" rx="18" fill="none" stroke="#f97316" stroke-width="1.8"/>
+  <text x="901" y="634" text-anchor="middle" class="group-title">LinkseeHost / On-Robot Controller (K3)</text>
+  <rect x="332" y="649" width="112" height="52" rx="16" class="node"/>
+  <text x="388" y="671" text-anchor="middle" class="node-title">USB cameras</text>
+  <text x="388" y="691" text-anchor="middle" class="node-sub">front / wrist</text>
+  <rect x="334" y="767" width="118" height="51" rx="16" class="node"/>
+  <text x="393" y="789" text-anchor="middle" class="node-title">Robot state</text>
+  <text x="393" y="809" text-anchor="middle" class="node-sub">arm + base</text>
+  <rect x="630" y="649" width="326" height="52" rx="16" fill="#fff6ed" stroke="#334155" stroke-width="1.4"/>
+  <text x="793" y="671" text-anchor="middle" class="node-title">LinkseeHost</text>
+  <text x="793" y="691" text-anchor="middle" class="node-sub">receive action / gather observation / execute</text>
+  <rect x="1288" y="649" width="126" height="52" rx="16" class="node"/>
+  <text x="1351" y="671" text-anchor="middle" class="node-title">SO101</text>
+  <text x="1351" y="691" text-anchor="middle" class="node-sub">Follower Arm</text>
+  <rect x="1234" y="767" width="235" height="51" rx="16" class="node"/>
+  <text x="1351" y="789" text-anchor="middle" class="node-title">LinkseeBaseAdapter</text>
+  <text x="1351" y="809" text-anchor="middle" class="node-sub">Spacemit Robot SDK chassis</text>
+  <path d="M956 674L1170 600L1275 422" class="wire"/>
+  <text x="1164" y="493" text-anchor="middle" class="label">publish observation</text>
+  <path d="M1294 544L1180 625L956 689" class="wire"/>
+  <text x="1100" y="591" text-anchor="middle" class="label">Host receives action</text>
+  <path d="M444 675H630" class="wire"/>
+  <text x="536" y="666" text-anchor="middle" class="label">image observation</text>
+  <path d="M452 793L630 688" class="wire"/>
+  <text x="545" y="742" text-anchor="middle" class="label">state observation</text>
+  <path d="M956 675H1288" class="wire"/>
+  <text x="1120" y="667" text-anchor="middle" class="label">SO101 control</text>
+  <path d="M956 699L1234 792" class="wire"/>
+  <text x="1100" y="724" text-anchor="middle" class="label">base control</text>
+
+  <!-- Robot and physical world -->
+  <rect x="46" y="667" width="149" height="338" rx="18" fill="none" stroke="#8160b6" stroke-width="1.8"/>
+  <text x="120" y="693" text-anchor="middle" class="group-title">Linksee Robot</text>
+  <rect x="61" y="709" width="120" height="52" rx="16" class="node"/>
+  <text x="121" y="731" text-anchor="middle" class="node-title">Workspace</text>
+  <text x="121" y="751" text-anchor="middle" class="node-sub">object / scene</text>
+  <rect x="68" y="826" width="113" height="52" rx="16" class="node"/>
+  <text x="124" y="848" text-anchor="middle" class="node-title">Robot arm</text>
+  <text x="124" y="868" text-anchor="middle" class="node-sub">grasp / place</text>
+  <rect x="60" y="944" width="123" height="51" rx="16" class="node"/>
+  <text x="121" y="966" text-anchor="middle" class="node-title">Mobile base</text>
+  <text x="121" y="986" text-anchor="middle" class="node-sub">move / turn</text>
+  <path d="M181 735L332 675" class="wire"/>
+  <text x="257" y="704" text-anchor="middle" class="label">visual input</text>
+  <path d="M181 850L334 784" class="wire"/>
+  <text x="251" y="809" text-anchor="middle" class="label">joint state</text>
+  <path d="M183 962L334 810" class="wire"/>
+  <text x="267" y="894" text-anchor="middle" class="label">base state</text>
+  <path d="M1351 701L1200 715V847H181" class="wire"/>
+  <text x="571" y="870" text-anchor="middle" class="label">drive arm</text>
+  <path d="M1351 818V1020H121V995" class="wire"/>
+  <text x="735" y="1010" text-anchor="middle" class="label">drive base</text>
+</svg>
