@@ -10,3 +10,4 @@ slug: /k3/reference-solutions
 - [3.3 Robotic Arm (LeRobot)](3.3-机械臂/index.md)
 - [3.4 Humanoid Robot](3.4-人形机器人Humanoid.md)
 - [3.5 RiVision - Edge AI Video Analytics](3.5-智能视频分析Rivision.md)
+- [3.6 Unitree Go2 Quadruped Robot](3.6-四足机器人Unitree-Go2.md)
