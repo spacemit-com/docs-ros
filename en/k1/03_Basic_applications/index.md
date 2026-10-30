@@ -14,3 +14,4 @@ Guide to basic application development:
 - [3.5 High-Performance Computing Library Usage](3.5_High_Performance_Computing_Library/index.md)
 - [3.6 SDK SDK Integration](3.6_SDK_integration/index.md)
 - [3.7 Image Processing Acceleration](3.7_Image_processing_acceleration/index.md)
+- [3.8 RealSense Depth Camera Usage](3.8_realsense_usage/index.md)
