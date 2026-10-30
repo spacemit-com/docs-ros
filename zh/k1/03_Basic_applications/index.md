@@ -14,3 +14,4 @@ slug: /basic_applications
 - [3.5 RVV优化库使用](3.5_High_Performance_Computing_Library/index.md)
 - [3.6 SDK 集成](3.6_SDK_integration/index.md)
 - [3.7 图像处理加速](3.7_Image_processing_acceleration/index.md)
+- [3.8 RealSense 深度相机使用](3.8_realsense_usage/index.md)
