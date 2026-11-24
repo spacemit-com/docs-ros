@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xml:lang="zh-CN" width="1360" height="1306" viewBox="0 0 1360 1306" role="img" aria-labelledby="title desc">
+<title id="title">RL 策略推理组件架构</title>
+<desc id="desc">策略 YAML 和模型文件由机型仓库提供，同一 YAML 可声明多个策略。初始化时 LoadPolicyConfigFromYaml 按策略名加载并校验配置，返回的 exec_cfg 交给 PolicyExecutor 的 Init 加载模型，kp、kd、command_init 等上层参数由上层应用使用。上层应用每个推理周期写入机器人状态与速度命令、自定义标量或数组以及 external 输入。执行器依次完成三步：观测组装（AssembleObs）按段计算观测项，可带 flat_history 或 frame_history 历史，各段拼接为观测向量；模型推理（Infer）按 model_io 声明的张量名绑定输入来源和输出用途，推理后端为 ONNX Runtime（CPU 或 SpaceMIT EP）或 MNN（CPU），feedback 把输出回灌到下一帧的输入，输出的 action 可选裁剪和平滑；关节映射（MapActionToTargetPos）把 action 缩放并加上默认位置后按 action_joint_index 写入对应关节。上层应用读取关节目标位置和 expose 输出。配套工具包括功能测试、后端测试和性能基准。</desc>
+<defs><style>
+text { font-family: "Noto Sans CJK SC", "Noto Sans CJK JP", "PingFang SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif; }
+</style>
+<marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#286fbb"/></marker>
+<marker id="gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#8a98a7"/></marker>
+<marker id="purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#8155a3"/></marker>
+</defs>
+<rect width="1360" height="1306" fill="#ffffff"/>
+<rect x="12" y="12" width="1336" height="1282" rx="22" fill="#ffffff" stroke="#ccd5df" stroke-width="1.6"/>
+<text x="680" y="62" font-size="34" font-weight="700" text-anchor="middle" fill="#172635">RL 策略推理组件</text>
+<text x="680" y="93" font-size="17" font-weight="400" text-anchor="middle" fill="#536779">与机型解耦：观测组装、模型输入输出、推理后端和动作映射全部由策略 YAML 配置</text>
+<g id="config">
+<rect x="30" y="116" width="1300" height="118" rx="16" fill="#fff5dc" stroke="#c28d2b" stroke-width="1.8"/>
+<text x="54" y="166" font-size="22" font-weight="700" text-anchor="start" fill="#172635">策略配置与模型</text>
+<text x="54" y="192" font-size="14" font-weight="400" text-anchor="start" fill="#536779">由机型仓库提供</text>
+<rect x="304" y="134" width="400" height="82" rx="10" fill="#ffffff" stroke="#c9a45a" stroke-width="1.5"/>
+<text x="504" y="161" font-size="18" font-weight="600" text-anchor="middle" fill="#172635">策略 YAML</text>
+<text x="504" y="183" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">rl_policy.onnx_infer.policies.&lt;name&gt;</text>
+<text x="504" y="204" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">观测段、model_io、后端与运行参数、动作映射、kp / kd</text>
+<text x="722" y="182" font-size="20" font-weight="500" text-anchor="middle" fill="#536779">+</text>
+<rect x="740" y="134" width="316" height="82" rx="10" fill="#ffffff" stroke="#c9a45a" stroke-width="1.5"/>
+<text x="898" y="161" font-size="18" font-weight="600" text-anchor="middle" fill="#172635">模型文件</text>
+<text x="898" y="184" font-size="16" font-weight="400" text-anchor="middle" fill="#172635">.onnx 或 .mnn</text>
+<text x="898" y="205" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">路径由 model_path 指定</text>
+<text x="1215" y="170" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">同一 YAML 可声明多个策略</text>
+<text x="1215" y="192" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">运行时按名称加载和切换</text>
+</g>
+<path d="M680 234 V282" fill="none" stroke="#8a98a7" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#gray)"/>
+<text x="694" y="263" font-size="14" font-weight="400" text-anchor="start" fill="#536779">yaml_path, policy_name, robot_dir</text>
+<g id="inputs">
+<rect x="30" y="284" width="230" height="878" rx="16" fill="#f4f6f8" stroke="#8393a3" stroke-width="1.8"/>
+<text x="145" y="322" font-size="21" font-weight="700" text-anchor="middle" fill="#172635">输入</text>
+<text x="145" y="346" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">由上层应用写入</text>
+<rect x="44" y="494" width="202" height="66" rx="10" fill="#ffffff" stroke="#8d9cab" stroke-width="1.5"/>
+<text x="145" y="521" font-size="16" font-weight="600" text-anchor="middle" fill="#172635">机器人状态与速度命令</text>
+<text x="145" y="544" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">AssembleObs 入参</text>
+<rect x="44" y="574" width="202" height="84" rx="10" fill="#ffffff" stroke="#8d9cab" stroke-width="1.5"/>
+<text x="145" y="601" font-size="16" font-weight="600" text-anchor="middle" fill="#172635">自定义标量 / 数组</text>
+<text x="145" y="623" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">SetCustomScalar</text>
+<text x="145" y="643" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">SetCustomArray</text>
+<rect x="44" y="854" width="202" height="66" rx="10" fill="#ffffff" stroke="#8d9cab" stroke-width="1.5"/>
+<text x="145" y="881" font-size="16" font-weight="600" text-anchor="middle" fill="#172635">external 输入</text>
+<text x="145" y="904" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">SetModelInput</text>
+</g>
+<g id="outputs">
+<rect x="1100" y="284" width="230" height="878" rx="16" fill="#f4f6f8" stroke="#8393a3" stroke-width="1.8"/>
+<text x="1215" y="322" font-size="21" font-weight="700" text-anchor="middle" fill="#172635">输出</text>
+<text x="1215" y="346" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">由上层应用读取</text>
+<rect x="1114" y="364" width="202" height="64" rx="10" fill="#ffffff" stroke="#8d9cab" stroke-width="1.5"/>
+<text x="1215" y="390" font-size="16" font-weight="600" text-anchor="middle" fill="#172635">上层参数</text>
+<text x="1215" y="412" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">kp / kd、command_init 等</text>
+<rect x="1114" y="821" width="202" height="66" rx="10" fill="#ffffff" stroke="#8d9cab" stroke-width="1.5"/>
+<text x="1215" y="848" font-size="16" font-weight="600" text-anchor="middle" fill="#172635">expose 输出</text>
+<text x="1215" y="871" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">GetModelOutput</text>
+<rect x="1114" y="1061" width="202" height="66" rx="10" fill="#ffffff" stroke="#8d9cab" stroke-width="1.5"/>
+<text x="1215" y="1088" font-size="16" font-weight="600" text-anchor="middle" fill="#172635">关节目标位置</text>
+<text x="1215" y="1111" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">target_pos，长度为关节数</text>
+</g>
+<g id="component">
+<rect x="304" y="284" width="752" height="878" rx="16" fill="#e8f3fb" stroke="#4e8fbb" stroke-width="1.8"/>
+<text x="680" y="322" font-size="22" font-weight="700" text-anchor="middle" fill="#172635">策略推理库 librl.so</text>
+<text x="680" y="346" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">对外头文件 include/rl_service.h：LoadPolicyConfigFromYaml 与 PolicyExecutor</text>
+<rect x="324" y="370" width="712" height="52" rx="12" fill="#fffaf0" stroke="#c9a45a" stroke-width="1.8"/>
+<text x="344" y="403" font-size="20" font-weight="700" text-anchor="start" fill="#172635">初始化</text>
+<text x="416" y="403" font-size="15" font-weight="500" text-anchor="start" fill="#536779">LoadPolicyConfigFromYaml → Init(exec_cfg)</text>
+<text x="1016" y="403" font-size="14" font-weight="400" text-anchor="end" fill="#536779">按策略名加载并校验配置，加载模型</text>
+<rect x="324" y="440" width="712" height="216" rx="12" fill="#eff8f2" stroke="#4b9270" stroke-width="1.8"/>
+<text x="344" y="473" font-size="20" font-weight="700" text-anchor="start" fill="#172635">① 观测组装</text>
+<text x="460.547" y="473" font-size="15" font-weight="500" text-anchor="start" fill="#536779">AssembleObs</text>
+<text x="1016" y="473" font-size="14" font-weight="400" text-anchor="end" fill="#536779">各段依次拼接为观测向量</text>
+<rect x="340" y="490" width="350" height="150" rx="10" fill="#ffffff" stroke="#8fbfa6" stroke-width="1.5"/>
+<text x="515" y="516" font-size="17" font-weight="600" text-anchor="middle" fill="#172635">观测项</text>
+<text x="515" y="536" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">segment_&lt;n&gt;_terms</text>
+<text x="515" y="562" font-size="15" font-weight="400" text-anchor="middle" fill="#172635">ang_vel, gravity, command</text>
+<text x="515" y="584" font-size="15" font-weight="400" text-anchor="middle" fill="#172635">dof_pos, dof_vel, last_action</text>
+<text x="515" y="606" font-size="15" font-weight="400" text-anchor="middle" fill="#172635">phase, gait_phase, ref_motion_phase 等</text>
+<text x="515" y="628" font-size="15" font-weight="600" text-anchor="middle" fill="#172635">自定义标量、自定义数组</text>
+<path d="M690 565 H720" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<rect x="722" y="490" width="298" height="150" rx="10" fill="#ffffff" stroke="#8fbfa6" stroke-width="1.5"/>
+<text x="871" y="516" font-size="17" font-weight="600" text-anchor="middle" fill="#172635">分段历史</text>
+<text x="871" y="536" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">segment_&lt;n&gt;_mode</text>
+<text x="742" y="566" font-size="15" font-weight="600" text-anchor="start" fill="#172635">无历史</text>
+<text x="1000" y="566" font-size="14" font-weight="400" text-anchor="end" fill="#536779">只取当前帧</text>
+<text x="742" y="593" font-size="15" font-weight="600" text-anchor="start" fill="#172635">flat_history</text>
+<text x="1000" y="593" font-size="14" font-weight="400" text-anchor="end" fill="#536779">按变量分组</text>
+<text x="742" y="620" font-size="15" font-weight="600" text-anchor="start" fill="#172635">frame_history</text>
+<text x="1000" y="620" font-size="14" font-weight="400" text-anchor="end" fill="#536779">按帧滑窗</text>
+<path d="M680 656 V692" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<text x="668" y="679" font-size="14" font-weight="500" text-anchor="end" fill="#536779">观测向量</text>
+<text x="694" y="679" font-size="14" font-weight="400" text-anchor="start" fill="#536779">可选裁剪 clip_observations</text>
+<rect x="324" y="694" width="712" height="280" rx="12" fill="#f5f9ff" stroke="#4688c2" stroke-width="1.8"/>
+<text x="344" y="727" font-size="20" font-weight="700" text-anchor="start" fill="#172635">② 模型推理</text>
+<text x="460.547" y="727" font-size="15" font-weight="500" text-anchor="start" fill="#536779">Infer</text>
+<text x="1016" y="727" font-size="14" font-weight="400" text-anchor="end" fill="#536779">按张量名声明，MLP、LSTM、历史输入等结构通用</text>
+<rect x="340" y="744" width="262" height="188" rx="10" fill="#ffffff" stroke="#8aa9c2" stroke-width="1.5"/>
+<text x="471" y="770" font-size="17" font-weight="600" text-anchor="middle" fill="#172635">模型输入来源</text>
+<text x="471" y="790" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">model_io.inputs</text>
+<text x="358" y="817" font-size="15" font-weight="600" text-anchor="start" fill="#172635">observation</text>
+<text x="584" y="817" font-size="14" font-weight="400" text-anchor="end" fill="#536779">观测向量</text>
+<text x="358" y="842" font-size="15" font-weight="600" text-anchor="start" fill="#172635">observation_history</text>
+<text x="584" y="842" font-size="14" font-weight="400" text-anchor="end" fill="#536779">历史窗口</text>
+<text x="358" y="867" font-size="15" font-weight="600" text-anchor="start" fill="#172635">constant</text>
+<text x="584" y="867" font-size="14" font-weight="400" text-anchor="end" fill="#536779">固定值</text>
+<text x="358" y="892" font-size="15" font-weight="600" text-anchor="start" fill="#172635">external</text>
+<text x="584" y="892" font-size="14" font-weight="400" text-anchor="end" fill="#536779">上层写入</text>
+<text x="358" y="917" font-size="15" font-weight="600" text-anchor="start" fill="#172635">feedback</text>
+<text x="584" y="917" font-size="14" font-weight="400" text-anchor="end" fill="#536779">上一帧输出</text>
+<path d="M602 838 H630" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<rect x="632" y="744" width="170" height="188" rx="10" fill="#fff7f6" stroke="#bf716b" stroke-width="1.5"/>
+<text x="717" y="770" font-size="17" font-weight="600" text-anchor="middle" fill="#172635">推理后端</text>
+<text x="717" y="790" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">backend, runtime</text>
+<text x="717" y="824" font-size="16" font-weight="600" text-anchor="middle" fill="#172635">ONNX Runtime</text>
+<text x="717" y="845" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">CPU 或 SpaceMIT EP</text>
+<path d="M652 862 H782" stroke="#e3bdb9" stroke-width="1.4"/>
+<text x="717" y="889" font-size="16" font-weight="600" text-anchor="middle" fill="#172635">MNN</text>
+<text x="717" y="910" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">CPU</text>
+<path d="M802 838 H830" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<rect x="832" y="744" width="188" height="188" rx="10" fill="#ffffff" stroke="#8aa9c2" stroke-width="1.5"/>
+<text x="926" y="770" font-size="17" font-weight="600" text-anchor="middle" fill="#172635">模型输出用途</text>
+<text x="926" y="790" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">model_io.outputs</text>
+<text x="850" y="825" font-size="15" font-weight="600" text-anchor="start" fill="#172635">action</text>
+<text x="1002" y="825" font-size="14" font-weight="400" text-anchor="end" fill="#536779">策略动作</text>
+<text x="850" y="859" font-size="15" font-weight="600" text-anchor="start" fill="#172635">expose</text>
+<text x="1002" y="859" font-size="14" font-weight="400" text-anchor="end" fill="#536779">上层读取</text>
+<text x="850" y="893" font-size="15" font-weight="600" text-anchor="start" fill="#172635">ignore</text>
+<text x="1002" y="893" font-size="14" font-weight="400" text-anchor="end" fill="#536779">忽略</text>
+<path d="M926 932 V954 H471 V934" fill="none" stroke="#8155a3" stroke-width="2" marker-end="url(#purple)"/>
+<rect x="573.359" y="943" width="249.281" height="22" fill="#f5f9ff"/>
+<text x="698" y="959" font-size="14" font-weight="500" text-anchor="middle" fill="#6b4691">feedback：输出回灌到下一帧的输入</text>
+<path d="M680 974 V1010" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<text x="668" y="997" font-size="14" font-weight="500" text-anchor="end" fill="#536779">action</text>
+<text x="694" y="997" font-size="14" font-weight="400" text-anchor="start" fill="#536779">可选裁剪 clip_actions、平滑 action_blend_ratio</text>
+<rect x="324" y="1012" width="712" height="130" rx="12" fill="#faf7fe" stroke="#9a80b6" stroke-width="1.8"/>
+<text x="344" y="1045" font-size="20" font-weight="700" text-anchor="start" fill="#172635">③ 关节映射</text>
+<text x="460.547" y="1045" font-size="15" font-weight="500" text-anchor="start" fill="#536779">MapActionToTargetPos</text>
+<text x="1016" y="1045" font-size="14" font-weight="400" text-anchor="end" fill="#536779">未映射的关节保持 rl_default_pos</text>
+<rect x="340" y="1062" width="324" height="64" rx="10" fill="#ffffff" stroke="#b9a6cf" stroke-width="1.5"/>
+<text x="502" y="1088" font-size="17" font-weight="600" text-anchor="middle" fill="#172635">缩放与偏置</text>
+<text x="502" y="1108" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">action × action_scale + rl_default_pos</text>
+<path d="M664 1094 H694" fill="none" stroke="#286fbb" stroke-width="2.2" marker-end="url(#blue)"/>
+<rect x="696" y="1062" width="324" height="64" rx="10" fill="#ffffff" stroke="#b9a6cf" stroke-width="1.5"/>
+<text x="858" y="1088" font-size="17" font-weight="600" text-anchor="middle" fill="#172635">关节索引映射</text>
+<text x="858" y="1108" font-size="14" font-weight="400" text-anchor="middle" fill="#536779">按 action_joint_index 写入对应关节</text>
+</g>
+<g id="flows">
+<path d="M1036 396 H1112" fill="none" stroke="#8a98a7" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#gray)"/>
+<path d="M246 527 H338" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<path d="M246 616 H338" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<path d="M246 887 H338" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<path d="M1020 854 H1112" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+<path d="M1020 1094 H1112" fill="none" stroke="#286fbb" stroke-width="2.4" marker-end="url(#blue)"/>
+</g>
+<g id="tools">
+<rect x="30" y="1186" width="1300" height="56" rx="14" fill="#f6f8fa" stroke="#a1adba" stroke-width="1.6"/>
+<text x="54" y="1221" font-size="19" font-weight="700" text-anchor="start" fill="#172635">配套工具</text>
+<rect x="265.219" y="1196" width="244.25" height="36" rx="9" fill="#ffffff" stroke="#b4bfca" stroke-width="1.3"/>
+<text x="281.219" y="1220" font-size="16" font-weight="600" text-anchor="start" fill="#172635">功能测试</text>
+<text x="357.219" y="1220" font-size="14" font-weight="400" text-anchor="start" fill="#536779">test_policy_executor</text>
+<rect x="529.469" y="1196" width="316.703" height="36" rx="9" fill="#ffffff" stroke="#b4bfca" stroke-width="1.3"/>
+<text x="545.469" y="1220" font-size="16" font-weight="600" text-anchor="start" fill="#172635">后端测试</text>
+<text x="621.469" y="1220" font-size="14" font-weight="400" text-anchor="start" fill="#536779">test_onnx_infer, test_mnn_infer</text>
+<rect x="866.172" y="1196" width="449.828" height="36" rx="9" fill="#ffffff" stroke="#b4bfca" stroke-width="1.3"/>
+<text x="882.172" y="1220" font-size="16" font-weight="600" text-anchor="start" fill="#172635">性能基准</text>
+<text x="958.172" y="1220" font-size="14" font-weight="400" text-anchor="start" fill="#536779">run_benchmark_onnx.sh, run_benchmark_policy.sh</text>
+</g>
+<g id="legend">
+<path d="M425 1270 H469" fill="none" stroke="#286fbb" stroke-width="2.2" marker-end="url(#blue)"/>
+<text x="479" y="1275" font-size="14" font-weight="400" text-anchor="start" fill="#172635">每周期数据流</text>
+<path d="M611 1270 H655" fill="none" stroke="#8a98a7" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#gray)"/>
+<text x="665" y="1275" font-size="14" font-weight="400" text-anchor="start" fill="#172635">初始化时加载一次</text>
+<path d="M825 1270 H869" fill="none" stroke="#8155a3" stroke-width="2.2" marker-end="url(#purple)"/>
+<text x="879" y="1275" font-size="14" font-weight="400" text-anchor="start" fill="#172635">跨帧回灌</text>
+</g>
+</svg>
